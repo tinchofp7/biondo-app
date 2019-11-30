@@ -82,7 +82,7 @@ function Dashboard(props) {
 		props.history.push('/')
 	}
 	function goToReservTurn(){
-		props.history.push('/reservar_turno')
+		props.history.push('/elegir_peluquero')
 	}
 }
 

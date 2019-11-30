@@ -9,7 +9,7 @@ import Select from '@material-ui/core/Select';
 const useStyles = makeStyles(theme => ({
   formControl: {
     margin: theme.spacing(1),
-    minWidth: 120,
+    minWidth: 180,
   },
   selectEmpty: {
     marginTop: theme.spacing(2),
@@ -21,10 +21,6 @@ export default function SimpleSelect() {
   const [age, setAge] = React.useState('');
 
   const inputLabel = React.useRef(null);
-  const [labelWidth, setLabelWidth] = React.useState(0);
-  React.useEffect(() => {
-    setLabelWidth(inputLabel.current.offsetWidth);
-  }, []);
 
   const handleChange = event => {
     setAge(event.target.value);
@@ -44,11 +40,10 @@ export default function SimpleSelect() {
           <MenuItem value="">
             <em>None</em>
           </MenuItem>
-          <MenuItem value={10}>Ten</MenuItem>
+          <MenuItem value={10}>Tessssssssssssssssn</MenuItem>
           <MenuItem value={20}>Twenty</MenuItem>
           <MenuItem value={30}>Thirty</MenuItem>
         </Select>
-        <FormHelperText>Auto width</FormHelperText>
       </FormControl>
     </div>
   );

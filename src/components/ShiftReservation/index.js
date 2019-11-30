@@ -34,6 +34,11 @@ function ShiftReservation (props){
                             setIsLoading(false)
                         }, 2000);
                     })
+                    loadBarbers()
+                    .then(function(data){
+                        setBarbersArray(data)
+                        console.log(data)
+                    })
                 }, [])
             
     function mergeDias(barber, inputY, inputM, inputD) {
@@ -76,10 +81,23 @@ function ShiftReservation (props){
             arri
             )
         })}
+    function loadBarbers (){
+        let barberos = []
+        return new Promise( resolve => { firebase.db.collection("barbers").get().then(function(querySnapshot) {
+            querySnapshot.forEach(function(doc) {
+                // doc.data() is never undefined for query doc snapshots
+                barberos.push({id: doc.id, nombre: doc.data().name, apellido: doc.data().lastname, photoUrl: doc.data().photoUrl})
+            });
+        });
+        resolve(
+            barberos
+            )
+        })}
         
             return(
         <div>
-            <Calendar beforeShowDay="Monday" value={dateTurn} minDate={new Date()} onClickDay={(value) => setDateTurn(value)} />
+            <Calendar value={dateTurn} minDate={new Date()} onClickDay={(value) => setDateTurn(value)} />
+            <SimpleSelect />
          {isLoading ? <CircularProgress />
          :
          <div>{consultaApi.map(hora =><SimpleList valor={hora.time} color={hora.isAv} disable={!hora.isAv}></SimpleList>)}</div>}
