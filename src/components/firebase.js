@@ -1,0 +1,70 @@
+import firebase from 'firebase'
+import 'firebase/auth'  
+
+const config = {
+    apiKey: "AIzaSyDtobeLfzL1H_YrZgypo6UxNIaqR6oEoKA",
+    authDomain: "biondo-auth.firebaseapp.com",
+    databaseURL: "https://biondo-auth.firebaseio.com",
+    projectId: "biondo-auth",
+    storageBucket: "biondo-auth.appspot.com",
+    messagingSenderId: "251692779872",
+    appId: "1:251692779872:web:b49d12a7db401fced6f605",
+    measurementId: "G-EV27LSJV79"
+}
+
+class Firebase {
+	constructor() {
+		firebase.initializeApp(config)
+        this.auth = firebase.auth()  
+        this.db = firebase.firestore()
+        this.db.settings({timestampsInSnapshots: true})
+		this.providers = {
+			googleProvider: new firebase.auth.GoogleAuthProvider(),
+			emailAndPass: new firebase.auth.EmailAuthProvider()
+		  };
+
+	}
+
+	login(email, password) {
+		return this.auth.signInWithEmailAndPassword(email, password)
+    }
+
+    loginWithGoogle() {
+		return this.auth.signInWithPopup(this.providers.googleProvider)
+	}
+
+	logout() {
+		return this.auth.signOut()
+	}
+
+	async register(name, email, password) {
+		await this.auth.createUserWithEmailAndPassword(email, password)
+		return this.auth.currentUser.updateProfile({
+			displayName: name
+		})
+	}
+
+	addQuote(quote) {
+		if(!this.auth.currentUser) {
+			return alert('Not authorized')
+		}
+
+		return this.db.doc(`users_codedamn_video/${this.auth.currentUser.uid}`).set({
+			quote
+		})
+	}
+
+	isInitialized() {
+		return new Promise(resolve => {
+			this.auth.onAuthStateChanged(resolve)
+		})
+	}
+
+	getCurrentUsername() {
+		return this.auth.currentUser && this.auth.currentUser.displayName.split(" ")[0]
+	}
+
+
+}
+
+export default new Firebase()
