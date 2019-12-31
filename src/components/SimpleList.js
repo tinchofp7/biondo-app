@@ -40,7 +40,6 @@ export default function SimpleList(props) {
     disable: PropTypes.bool.isRequired
   }
   const { valor, color, disable } = props;
-  console.log(valor)
   const classes = useStyles();
 
   return (

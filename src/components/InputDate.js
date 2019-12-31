@@ -6,7 +6,7 @@ import {
   MuiPickersUtilsProvider,
   KeyboardDatePicker,
 } from '@material-ui/pickers';
-import firebase from '../firebase'
+import firebase from './firebase'
 
 export default function MaterialUIPickers() {
   // The first commit of Material-UI

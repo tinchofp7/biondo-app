@@ -1,6 +1,6 @@
 import React, { useEffect, useState} from 'react';
 import {withRouter } from 'react-router-dom';
-import firebase from '../firebase'
+import firebase from './firebase'
 import {CircularProgress } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles';
 import ListItem from '@material-ui/core/ListItem';
@@ -38,7 +38,7 @@ function SelectBarber (props){
             loadBarbers()
                 .then(function (data) {
                     setBarbersArray(data)
-                    console.log(props.history)
+                    console.log(data)
                     setTimeout(() => {
                         setIsLoading(false)
                     }, 2000);
@@ -59,6 +59,9 @@ function SelectBarber (props){
             )
         })}
         
+    function ListItemLink(props) {
+        return <ListItem className={classes.borde} button component="a" {...props} />;
+    }
             return(
         <div>
          {isLoading ? <Skeleton variant="rect" width={480} height={800} />
@@ -70,11 +73,11 @@ function SelectBarber (props){
         {
          barbersArray.map(
              barbero =>
-                <ListItem className={classes.borde} button>
+             <ListItemLink href={ `${process.env.PUBLIC_URL}/seleccionar_dia/${ barbero.id }` }>
                 <Avatar alt="Remy Sharp" src={barbero.photoUrl} className={classes.bigAvatar} />
-                <ListItemText primary={barbero.nombre + " " + barbero.apellido}/>
+                <ListItemText primary={barbero.nombre + " " + barbero.apellido}  />
                     <NavigateNext />
-                </ListItem>
+             </ListItemLink>
              )
          }</div>}
         </div>

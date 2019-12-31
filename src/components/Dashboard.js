@@ -2,9 +2,9 @@ import React, { useEffect, useState } from 'react'
 import { Typography, Paper, Avatar, CircularProgress, Button, Container } from '@material-ui/core'
 import VerifiedUserOutlined from '@material-ui/icons/VerifiedUserOutlined'
 import withStyles from '@material-ui/core/styles/withStyles'
-import firebase from '../firebase'
+import firebase from './firebase'
 import { withRouter } from 'react-router-dom'
-import IconLabelTabs from '../IconLabelTabs';
+import IconLabelTabs from './IconLabelTabs';
 import { blue } from '@material-ui/core/colors'
 
 const styles = theme => ({
@@ -82,7 +82,7 @@ function Dashboard(props) {
 		props.history.push('/')
 	}
 	function goToReservTurn(){
-		props.history.push('/elegir_peluquero')
+		props.history.push('/elegir_barbero')
 	}
 }
 

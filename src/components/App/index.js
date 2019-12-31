@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import './styles.css'
-import HomePage from '../HomePage'
+import HomePage from '../HomePage/Home'
 import Login from '../Login'
 import Register from '../Register'
 import Dashboard from '../Dashboard'
