@@ -4,7 +4,7 @@ import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles'
 import { CssBaseline, CircularProgress } from '@material-ui/core'
 
 import firebase from '../components/firebase'
-import '../components/App/styles.css'
+import '../styles.css'
 import Register from '../components/Register';
 import NotFound from '../components/NotFound';
 import Login from '../components/Login';

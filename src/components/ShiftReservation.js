@@ -90,27 +90,19 @@ function ShiftReservation (props){
 export default withRouter(ShiftReservation); */
 import React, { useEffect, useState} from 'react';
 import {withRouter } from 'react-router-dom';
-import SimpleList from './SimpleList';
 import firebase from './firebase'
 import {CircularProgress } from '@material-ui/core'
 import Calendar from 'react-calendar';
-import SimpleSelect from './SimpleSelect';
-import TableTurns from './TableTurns'
 
-
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import Paper from '@material-ui/core/Paper';
+import Chip from '@material-ui/core/Chip';
+import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
 
 
 function ShiftReservation (props){
 
     const t1 = new Date("2019-11-30 13:00");
-    const t2 = new Date("2019-11-30 21:00");
+    const t2 = new Date("2019-11-30 20:30");
     let turnos = [];
     let barber = {}
     
@@ -147,38 +139,8 @@ function ShiftReservation (props){
             }) */
                     setTimeout(() => {
                         setIsLoading(false)
-                    }, 1000);
+                    }, 10);
         }, [])
-     /*       
-    function mergeDias(barber, inputY, inputM, inputD) {
-        const diaElegido = barber.años.map(e => {
-            if (e.año === inputY) {
-                return e.meses.map(mes => {
-                    if (mes.mes === inputM) {
-                        return mes.dias.map(dia => {
-                            if (dia.dia === inputD) {
-                                return dia
-                            }
-                        })
-                    }
-                })
-            }
-        })
-        if (diaElegido === undefined) {
-            return mapa;
-        } else {
-            const mapaFinal = mapa.map(horaAv => {
-                diaElegido.forEach(resp => {
-                    if (resp.data.time == horaAv.time) {
-                        horaAv.isAv = false
-                    }
-                })
-                return horaAv
-            })
-            return mapaFinal
-        }
-    }
-    */
 
     const useStyles = makeStyles({
       root: {
@@ -216,27 +178,28 @@ function ShiftReservation (props){
     return(
         
         <div>
-         {isLoading ? <CircularProgress />
-         :
-         // <div>
-         //    {consultaApi.map(barber => 
-         //         <SimpleList name={barber.data.name} 
-         //            lastname={barber.data.lastname} 
-         //            turns={barber.data.turns}
-         //         ></SimpleList>)}
-         // </div>
-         // <div>     
-      <div style={{display: "flex",justifyContent: "left"}}>
-            {consultaApi.map(barber => 
-                 <TableTurns name={barber.data.name} 
-                 lastname={barber.data.lastname} 
-                 turns={barber.data.turns}
-                 ></TableTurns>)}
-                 <div style={{boxShadow: "5px 5px 25px"}}>
-                 <Calendar />
-                 </div>
-         </div>
-        }
+            {isLoading ? <CircularProgress />
+                :
+                        <div style={{ display: "inline-flex" }}>
+                            <div style={{ boxShadow: "5px 5px 25px", display: "flex", marginLeft:"15%" }}>
+                                <Calendar
+                                value={dateTurn}
+                                minDate={new Date()}
+                                maxDate={new Date("Wed Jan 22 2020 00:00:00 GMT-0300")}
+                                onClickDay={(value) => console.log(value)}
+                                />
+                            </div>
+                            <div style={{ marginLeft: "10%", marginRight: "10%" }}>
+                                <Grid container spacing={3}>
+                                    {turnos.map(hora =>
+                                        <Grid key={hora} item xs={12} sm={6} md={3}  >
+                                            <Chip color="primary" style={{ fontSize: "18px", display: "flex", height: "100%" }} onClick={() => console.log(hora)} label={hora} />
+                                        </Grid>
+                                    )}
+                                </Grid>
+                            </div>
+                        </div>
+            }
         </div>
 
 

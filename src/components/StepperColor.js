@@ -11,7 +11,7 @@ import GroupAddIcon from '@material-ui/icons/GroupAdd';
 import VideoLabelIcon from '@material-ui/icons/VideoLabel';
 import StepConnector from '@material-ui/core/StepConnector';
 import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
+import { Typography, FormControl, InputLabel, Input, TextField} from '@material-ui/core';
 import ShiftReservation from './ShiftReservation';
 
 import Card from '@material-ui/core/Card';
@@ -102,11 +102,11 @@ const useStyles = makeStyles(theme => ({
   root: {
     width: '100%',
     marginTop: "64px",
-    marginLeft: "72px"
+    textAlign: "center"
   },
   button: {
     marginRight: theme.spacing(10),
-    marginLeft: "5%"
+    marginTop: theme.spacing(10)
   },
   instructions: {
     marginTop: theme.spacing(1),
@@ -124,7 +124,7 @@ function getSteps() {
   return ['Elegí a tu barbero favorito', 'Selecciona día y hora', 'Confirma'];
 }
 const ListaBarber = (barberos) => {
-    const classes = useStyles();
+  const classes = useStyles();
     let lista = barberos.barberos.map( barbero =>{
     return (<Card className={classes.card}>
                 <CardActionArea>
@@ -146,6 +146,55 @@ const ListaBarber = (barberos) => {
     )
     return lista
 }
+const ResumenTurno = ()=>{
+  return (
+    <div>
+    <TextField
+      id="outlined-full-width"
+      label="Barbero"
+      style={{ margin: 8 }}
+      placeholder="Ulises Perez Gomez"
+      margin="normal"
+      InputLabelProps={{
+        shrink: true,
+      }}
+      variant="outlined"
+      InputProps={{
+        readOnly: true
+      }}
+    />
+    <TextField
+      id="outlined-full-width"
+      label="Fecha del turno"
+      style={{ margin: 8 }}
+      placeholder="20/01/2020"
+      margin="normal"
+      InputLabelProps={{
+        shrink: true,
+      }}
+      variant="outlined"
+      InputProps={{
+        readOnly: true
+      }}
+    />
+    <TextField
+      id="outlined-full-width"
+      label="Horario"
+      style={{ margin: 8 }}
+      placeholder="13:00"
+      margin="normal"
+      InputLabelProps={{
+        shrink: true,
+      }}
+      variant="outlined"
+      InputProps={{
+        readOnly: true
+      }}
+    />
+  </div>
+  )
+}
+
 function getStepContent(step, barberos) {
   switch (step) {
     case 0:
@@ -155,7 +204,7 @@ function getStepContent(step, barberos) {
     case 1:
       return <ShiftReservation />;
     case 2:
-      return 'This is the bit I really care about!';
+      return <ResumenTurno/>
     default:
       return 'Unknown step';
   }
@@ -203,7 +252,7 @@ export default function CustomizedSteppers(props) {
             <Typography variant="overline" className={classes.instructions}>{getStepContent(activeStep, barberos)}</Typography>
             <div>
               <Button disabled={activeStep === 0} onClick={handleBack} className={classes.button}>
-                Back
+                Anterior
               </Button>
               <Button
                 variant="contained"
@@ -211,7 +260,7 @@ export default function CustomizedSteppers(props) {
                 onClick={handleNext}
                 className={classes.button}
               >
-                {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
+                {activeStep === steps.length - 1 ? 'Reservar' : 'Siguiente'}
               </Button>
             </div>
           </div>
