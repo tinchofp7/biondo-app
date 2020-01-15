@@ -21,6 +21,8 @@ import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import SelectBarber from './SelectBarber';
 
+import SweetAlert from 'sweetalert2-react';
+
 
 
 const ColorlibConnector = withStyles({
@@ -238,15 +240,18 @@ export default function CustomizedSteppers(props) {
         ))}
       </Stepper>
       <div>
-        {activeStep === steps.length ? (
-          <div>
-            <Typography className={classes.instructions}>
-              All steps completed - you&apos;re finished
-            </Typography>
-            <Button onClick={handleReset} className={classes.button}>
-              Reset
-            </Button>
-          </div>
+        {activeStep === steps.length ? (         
+      <div>
+    <button onClick={() => this.setState({ show: true })}>Alert</button>
+      <SweetAlert
+        show={true}
+        title="Gracias por reservar"
+        text="Llega 5 minutos antes de tu turno"
+        onConfirm={() => console.log("reservado")}
+        showConfirmButton={true}
+        confirmButtonText="Cerrar"
+      />
+      </div>
         ) : (
           <div style={{textAlign: "center"}}>
             <Typography variant="overline" className={classes.instructions}>{getStepContent(activeStep, barberos)}</Typography>
