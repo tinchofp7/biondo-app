@@ -90,7 +90,6 @@ function ShiftReservation (props){
 export default withRouter(ShiftReservation); */
 import React, { useEffect, useState} from 'react';
 import {withRouter } from 'react-router-dom';
-import RadioButtons from './RadioButtons';
 import SimpleList from './SimpleList';
 import firebase from './firebase'
 import {CircularProgress } from '@material-ui/core'
@@ -141,14 +140,14 @@ function ShiftReservation (props){
     const [barbersArray, setBarbersArray] = useState([])
     useEffect(
         () => {
-            loadTurnos()
+/*             loadTurnos()
             .then(function(data){
                 data[0].data.turns = turnos
                 setConsultaApi(data)
-                setTimeout(() => {
-                    setIsLoading(false)
-                }, 1000);
-            })
+            }) */
+                    setTimeout(() => {
+                        setIsLoading(false)
+                    }, 1000);
         }, [])
      /*       
     function mergeDias(barber, inputY, inputM, inputD) {
@@ -226,13 +225,16 @@ function ShiftReservation (props){
          //            turns={barber.data.turns}
          //         ></SimpleList>)}
          // </div>
-         // <div>
-          <div>
+         // <div>     
+      <div style={{display: "flex",justifyContent: "left"}}>
             {consultaApi.map(barber => 
                  <TableTurns name={barber.data.name} 
-                    lastname={barber.data.lastname} 
-                    turns={barber.data.turns}
+                 lastname={barber.data.lastname} 
+                 turns={barber.data.turns}
                  ></TableTurns>)}
+                 <div style={{boxShadow: "5px 5px 25px"}}>
+                 <Calendar />
+                 </div>
          </div>
         }
         </div>

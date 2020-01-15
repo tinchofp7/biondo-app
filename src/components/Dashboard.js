@@ -11,8 +11,9 @@ const styles = theme => ({
 	main: {
 		width: 'auto',
 		display: 'block', // Fix IE 11 issue.
-		marginLeft: theme.spacing.unit * 3,
+		marginLeft: theme.spacing.unit * 6,
 		marginRight: theme.spacing.unit * 3,
+		marginTop: theme.spacing.unit * 10,
 		[theme.breakpoints.up(400 + theme.spacing.unit * 3 * 2)]: {
 			width: 545,
 			marginLeft: 'auto',
@@ -71,16 +72,10 @@ function Dashboard(props) {
 					className={classes.submit}>
 					Reservá tu turno
           		</Button>
-			</Paper>
-				<IconLabelTabs />
+				</Paper>
 			</Container>
 		</main>
 	)
-
-	async function logout() {
-		await firebase.logout()
-		props.history.push('/')
-	}
 	function goToReservTurn(){
 		props.history.push('/elegir_barbero')
 	}

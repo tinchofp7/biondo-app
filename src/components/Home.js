@@ -38,9 +38,8 @@ function HomePage(props) {
 	return (
 		<main className={classes.main}>
 			<Paper className={classes.paper}>
-				<Avatar className={classes.avatar}>
-					<VerifiedUserOutlined />
-				</Avatar>
+				<Avatar className={classes.avatar} src="biondox.jpg">
+					</Avatar>
 				<Typography component="h1" variant="h5">
 					Hello Guest!
 				</Typography>
@@ -63,16 +62,6 @@ function HomePage(props) {
 					to="/login"
 					className={classes.submit}>
 					Login
-          		</Button>
-				<Button
-					type="submit"
-					fullWidth
-					variant="contained"
-					color="secondary"
-					component={Link}
-					to="/dashboard"
-					className={classes.submit}>
-					Dashboard
           		</Button>
 			</Paper>
 		</main>

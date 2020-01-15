@@ -1,17 +1,17 @@
 import React, { useState, useEffect } from 'react'
 import './styles.css'
+import { CircularProgress } from '@material-ui/core'
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
+import firebase from '../firebase'
+
 import HomePage from '../HomePage/Home'
 import Login from '../Login'
 import Register from '../Register'
 import Dashboard from '../Dashboard'
 import ShiftReservation from '../ShiftReservation'
 import SelectBarber from '../SelectBarber'
-import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles'
-import { CssBaseline, CircularProgress } from '@material-ui/core'
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
-import firebase from '../firebase'
+import GeneralDrawer from '../GeneralDrawer';
 
-const theme = createMuiTheme()
 
 export default function App() {
 
@@ -25,18 +25,18 @@ export default function App() {
 
 
 	return firebaseInitialized !== false ? (
-		<MuiThemeProvider theme={theme}>
-			<CssBaseline />
-			<Router>
-				<Switch>
-					<Route exact path="/" component={HomePage} />
-					<Route exact path="/login" component={Login} />
-					<Route exact path="/register" component={Register} />
-					<Route exact path="/dashboard" component={Dashboard} />
-					<Route exact path="/elegir_peluquero" component={SelectBarber} />
-					<Route exact path="/reservar_turno" component={ShiftReservation} />
-				</Switch>
-			</Router>
-		</MuiThemeProvider>
+		<Router>
+			<div>
+			<Switch>
+			<GeneralDrawer />
+				<Route exact path="/" component={HomePage} />
+				<Route exact path="/login" component={Login} />
+				<Route exact path="/register" component={Register} />
+				<Route exact path="/dashboard" component={Dashboard} />
+				<Route exact path="/elegir_peluquero" component={SelectBarber} />
+				<Route exact path="/reservar_turno" component={ShiftReservation} />
+			</Switch>
+			</div>
+		</Router>
 	) : <div id="loader"><CircularProgress /></div>
 }

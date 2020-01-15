@@ -1,5 +1,3 @@
-import React from 'react'
-
 const mapaHorarios = [
     {time:"13:00", isAv: true},
     {time:"14:00", isAv: true},
