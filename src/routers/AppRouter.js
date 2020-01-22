@@ -43,8 +43,7 @@ const AppRouter =() => {
             <Route path={`${process.env.PUBLIC_URL}/register`} render={(props) => !isLogin() ? (<Register {...props} url={URL}/>) : (<GeneralDrawer {...props} url={URL}/>,<Dashboard {...props} url={URL}/>)}/>
             <Route path={`${process.env.PUBLIC_URL}/`} render={(props) => !isLogin() ? (<Home {...props} url={URL}/>) : ([<GeneralDrawer {...props} url={URL}/>,<Dashboard {...props} url={URL}/>])} exact={true} />
             <Route path={`${process.env.PUBLIC_URL}/dashboard`} render={(props) => [<GeneralDrawer {...props} url={URL}/>,<Dashboard {...props} url={URL}/>]}/>
-            <Route path={`${process.env.PUBLIC_URL}/elegir_barbero`} render={(props) => [<GeneralDrawer {...props} url={URL}/>,<SelectBarber {...props} url={URL}/>]}/>
-            <Route path={`${process.env.PUBLIC_URL}/seleccionar_dia/:idBarbero`} render={(props) => [<GeneralDrawer {...props} url={URL}/>,<ShiftReservation {...props} url={URL}/>]}/>
+            <Route path={`${process.env.PUBLIC_URL}/reservaDeTurno`} render={(props) => [<GeneralDrawer {...props} url={URL}/>,<SelectBarber {...props} url={URL}/>]}/>
             <Route component={NotFound}/>
         </Switch>
     </div>

@@ -44,7 +44,7 @@ function SelectBarber (props){
     function loadBarbers (){
         var barberos = []
         return new Promise( resolve => {
-        if(process.env.NODE_ENV == 'development'){ 
+        if(process.env.NODE_ENV == 'production'){ 
             firebase.db.collection("turnBarber").get()
             .then(function(querySnapshot) {
                 querySnapshot.forEach(function(doc) {
@@ -67,7 +67,8 @@ function SelectBarber (props){
          {isLoading ? <Skeleton variant="rect" width={1300} height={600} />
          :
          <div className={classes.root}>
-        <StepperColor 
+        <StepperColor
+        history={props.history} 
         barberos={barbersArray}
         />
              )

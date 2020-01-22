@@ -39,9 +39,6 @@ const styles = theme => ({
 
 function Dashboard(props) {
 	const { classes } = props
-
-	
-	const [quote, setQuote] = useState('')
 	
 	useEffect(() => {
 		if(!firebase.getCurrentUsername()) {
@@ -77,7 +74,7 @@ function Dashboard(props) {
 		</main>
 	)
 	function goToReservTurn(){
-		props.history.push('/elegir_barbero')
+		props.history.push('/reservaDeTurno')
 	}
 }
 
