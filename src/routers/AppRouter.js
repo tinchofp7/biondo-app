@@ -18,38 +18,37 @@ import GeneralDrawer from '../components/GeneralDrawer';
 /* const process = require('../env.json'); */
 const theme = createMuiTheme()
 
-const AppRouter =() => {
+const AppRouter = () => {
     const [firebaseInitialized, setFirebaseInitialized] = useState(false)
 
-	useEffect(() => {
-		firebase.isInitialized().then(val => {
-			setFirebaseInitialized(val)
-		})
+    useEffect(() => {
+        firebase.isInitialized().then(val => {
+            setFirebaseInitialized(val)
+        })
     })
-    const isLogin = ()=>{
+    const isLogin = () => {
         return firebase.getCurrentUsername()
     }
 
-    return firebaseInitialized !== false ? 
-    (
-        
-        <MuiThemeProvider theme={theme}>
-    <CssBaseline />
-    <BrowserRouter>
-    <div>
-        <Switch>
-            {console.log('PUBLIC_URL:' , process.env.PUBLIC_URL)}
-            <Route path={`${process.env.PUBLIC_URL}/login`} render={(props) => !isLogin() ? (<Login {...props} url={URL}/>) : (<GeneralDrawer {...props} url={URL}/>,<Dashboard {...props} url={URL}/>)} />
-            <Route path={`${process.env.PUBLIC_URL}/register`} render={(props) => !isLogin() ? (<Register {...props} url={URL}/>) : (<GeneralDrawer {...props} url={URL}/>,<Dashboard {...props} url={URL}/>)}/>
-            <Route path={`${process.env.PUBLIC_URL}/`} render={(props) => !isLogin() ? (<Home {...props} url={URL}/>) : ([<GeneralDrawer {...props} url={URL}/>,<Dashboard {...props} url={URL}/>])} exact={true} />
-            <Route path={`${process.env.PUBLIC_URL}/dashboard`} render={(props) => [<GeneralDrawer {...props} url={URL}/>,<Dashboard {...props} url={URL}/>]}/>
-            <Route path={`${process.env.PUBLIC_URL}/reservaDeTurno`} render={(props) => [<GeneralDrawer {...props} url={URL}/>,<SelectBarber {...props} url={URL}/>]}/>
-            <Route component={NotFound}/>
-        </Switch>
-    </div>
-    </BrowserRouter>
-    </MuiThemeProvider>
-) : <div id="loader"><CircularProgress /></div>;
+    return firebaseInitialized !== false ?
+        (
+            <MuiThemeProvider theme={theme}>
+                <CssBaseline />
+                <BrowserRouter>
+                    <div>
+                        <Switch>
+                            {console.log('PUBLIC_URL:', process.env.PUBLIC_URL)}
+                            <Route path={`${process.env.PUBLIC_URL}/login`} render={(props) => !isLogin() ? (<Login {...props} url={URL} />) : (<GeneralDrawer {...props} url={URL} /> , <Dashboard {...props} url={URL} />)} />
+                            <Route path={`${process.env.PUBLIC_URL}/register`} render={(props) => !isLogin() ? (<Register {...props} url={URL} />) : (<GeneralDrawer {...props} url={URL} /> , <Dashboard {...props} url={URL} />)} />
+                            <Route path={`${process.env.PUBLIC_URL}/`} render={(props) => !isLogin() ? (<Home {...props} url={URL} />) : ([<GeneralDrawer {...props} url={URL} />, <Dashboard {...props} url={URL} />])} exact={true} />
+                            <Route path={`${process.env.PUBLIC_URL}/dashboard`} render={(props) => [<GeneralDrawer {...props} url={URL} />, <Dashboard {...props} url={URL} />]} />
+                            <Route path={`${process.env.PUBLIC_URL}/reservaDeTurno`} render={(props) => [<GeneralDrawer {...props} url={URL} />, <SelectBarber {...props} url={URL} />]} />
+                            <Route component={NotFound} />
+                        </Switch>
+                    </div>
+                </BrowserRouter>
+            </MuiThemeProvider>
+        ) : <div id="loader"><CircularProgress /></div>;
 }
 
 export default AppRouter; 

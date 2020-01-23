@@ -2,10 +2,9 @@ import React, { useEffect, useState} from 'react';
 import {withRouter } from 'react-router-dom';
 import firebase from './firebase'
 import { makeStyles } from '@material-ui/core/styles';
-import ListItem from '@material-ui/core/ListItem';
 import Skeleton from '@material-ui/lab/Skeleton';
 
-import StepperColor from './StepperColor';
+import ReservaTurno from './ReservaTurno';
 
 
 const useStyles = makeStyles(theme => ({
@@ -44,7 +43,7 @@ function SelectBarber (props){
     function loadBarbers (){
         var barberos = []
         return new Promise( resolve => {
-        if(process.env.NODE_ENV == 'production'){ 
+        if(process.env.NODE_ENV === 'production'){ 
             firebase.db.collection("turnBarber").get()
             .then(function(querySnapshot) {
                 querySnapshot.forEach(function(doc) {
@@ -67,7 +66,7 @@ function SelectBarber (props){
          {isLoading ? <Skeleton variant="rect" width={1300} height={600} />
          :
          <div className={classes.root}>
-        <StepperColor
+        <ReservaTurno
         history={props.history} 
         barberos={barbersArray}
         />

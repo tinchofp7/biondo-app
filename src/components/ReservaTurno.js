@@ -13,7 +13,8 @@ import Button from '@material-ui/core/Button';
 import { Typography, TextField} from '@material-ui/core';
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
-import { withRouter } from 'react-router-dom'
+import { withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
 
 import ShiftReservation from './ShiftReservation';
 import ListaBarber from './ListaBarber';
@@ -115,14 +116,16 @@ function getSteps() {
   return ['Elegí a tu barbero favorito', 'Selecciona día y hora', 'Confirma'];
 }
 
-const ResumenTurno = ()=>{
+const ResumenTurno = (props)=>{
+  const { barberSelect } = props.props;
+  
   return (
     <div>
     <TextField
       id="outlined-full-width"
       label="Barbero"
       style={{ margin: 8 }}
-      placeholder="Ulises Perez Gomez"
+      placeholder={barberSelect.nombre + " " + barberSelect.apellido}
       margin="normal"
       InputLabelProps={{
         shrink: true,
@@ -164,21 +167,19 @@ const ResumenTurno = ()=>{
   )
 }
 
-function getStepContent(step, barberos) {
+function getStepContent(step, barberos, props) {
   switch (step) {
     case 0:
-      return (
-          <ListaBarber barberos={barberos}/>
-      );
+      return <ListaBarber barberos={barberos}/>
     case 1:
       return <ShiftReservation />;
     case 2:
-      return <ResumenTurno/>
+      return <ResumenTurno props={props}/>
     default:
       return 'Unknown step';
   }
 }
-const CustomizedSteppers = (props)=> {
+const ReservaTurno = (props)=> {
   const {barberos, history} = props;
 const classes = useStyles();
 const [activeStep, setActiveStep] = React.useState(0);
@@ -197,7 +198,6 @@ const handleReset = () => {
 };
 
 const MiModal = (props)=>{
-  debugger
 const MySwal = withReactContent(Swal)
   return(
     MySwal.fire({
@@ -225,7 +225,7 @@ return (
         <MiModal props={props}/>  
       ) : (
         <div style={{textAlign: "center"}}>
-          <Typography variant="overline" className={classes.instructions}>{getStepContent(activeStep, barberos)}</Typography>
+          <Typography variant="overline" className={classes.instructions}>{getStepContent(activeStep, barberos, props)}</Typography>
           <div>
             <Button disabled={activeStep === 0} onClick={handleBack} className={classes.button}>
               Anterior
@@ -245,4 +245,11 @@ return (
   </div>
 );
 }
-export default  withRouter(CustomizedSteppers)
+
+const mapStateToProps = (state) =>{
+  return {
+      barberSelect: state.barberSelect
+  }
+}
+
+export default connect(mapStateToProps)(ReservaTurno)

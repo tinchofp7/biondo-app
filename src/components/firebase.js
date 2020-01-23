@@ -17,7 +17,6 @@ class Firebase {
 		firebase.initializeApp(config)
         this.auth = firebase.auth()  
         this.db = firebase.firestore()
-        this.db.settings({timestampsInSnapshots: true})
 		this.providers = {
 			googleProvider: new firebase.auth.GoogleAuthProvider(),
 			emailAndPass: new firebase.auth.EmailAuthProvider()

@@ -3,7 +3,9 @@ import PropTypes from 'prop-types';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 import { Typography, CardMedia, CardContent, CardActionArea, Card, } from '@material-ui/core';
 import { withRouter } from 'react-router-dom';
-import StepperColor from './StepperColor'
+import { connect } from 'react-redux';
+
+import ReservaTurno from './ReservaTurno'
 
 const useStyles = makeStyles(theme => ({
     card: {
@@ -16,12 +18,13 @@ const useStyles = makeStyles(theme => ({
 const ListaBarber = (props) => {
     const classes = useStyles();
     const { barberos } = props;
-    const [barberSelect, setBarberSelect] = useState("");
+    const [barberSelect, setBarberSelect] = useState({});
     const setBarber = (id) =>{
-        setBarberSelect(id);
+        setBarberSelect(id)
     }
-    let lista = barberos.map( barbero =>{
-    return (<Card className={classes.card} key={barbero.nombre} onClick={()=> setBarber(barbero.id)}>
+    props.saveBarber(barberSelect);
+    let lista = barberos.map( barbero =>{   
+    return (<Card className={classes.card} key={barbero.nombre} onClick={()=> setBarber(barbero)}>
                   <CardActionArea >
                       <CardMedia
                           component="img"
@@ -42,4 +45,23 @@ const ListaBarber = (props) => {
       return lista
   }
 
-export default  withRouter(ListaBarber)
+  const mapStateToProps = (state) =>{
+    return {
+        barberSelect: state.barberSelect
+    }
+  }
+
+  const saveBarber = (barberSelect)=>{
+    return {
+        type: 'SET_BARBERO',
+        barberSelect: barberSelect
+    }
+  }
+
+  const mapDispatchToProps = {
+    saveBarber: saveBarber
+  }
+
+  
+
+export default connect(mapStateToProps,mapDispatchToProps)(ListaBarber)

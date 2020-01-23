@@ -21,7 +21,7 @@ function ShiftReservation (props){
     ]
     const [consultaApi, setConsultaApi ] = useState([])
     const [isLoading, setIsLoading ] = useState(true)
-    const [dateTurn, setDateTurn] = useState(new Date())
+    const [dateTurnSelect, setDateTurnSelect] = useState(new Date())
     const idBarbero = props.match.params.idBarbero
     useEffect(
         () => {
@@ -79,7 +79,7 @@ function ShiftReservation (props){
         
         return(
         <div>
-            <Calendar value={dateTurn} minDate={new Date()} onClickDay={(value) => setDateTurn(value)} />
+            <Calendar value={dateTurnSelect} minDate={new Date()} onClickDay={(value) => setDateTurnSelect(value)} />
          {isLoading ? <CircularProgress />
          :
          <div>{consultaApi.map(hora =><SimpleList valor={hora.time} color={hora.isAv} disable={!hora.isAv}></SimpleList>)}</div>}
@@ -88,19 +88,21 @@ function ShiftReservation (props){
 }
 
 export default withRouter(ShiftReservation); */
+
 import React, { useEffect, useState} from 'react';
 import {withRouter } from 'react-router-dom';
 import firebase from './firebase'
 import {CircularProgress } from '@material-ui/core'
 import Calendar from 'react-calendar';
-
 import Chip from '@material-ui/core/Chip';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
+import { connect } from 'react-redux';
+
 
 
 function ShiftReservation (props){
-
+    const { barberSelect } = props;
     const t1 = new Date("2019-11-30 13:00");
     const t2 = new Date("2019-11-30 20:30");
     let turnos = [];
@@ -126,21 +128,24 @@ function ShiftReservation (props){
         {time:"20:00", isAv: true},
         {time:"21:00", isAv: true}
     ]
-    const [consultaApi, setConsultaApi ] = useState([])
+
+    const [arrayTurnos, setArrayTurnos ] = useState([])
     const [isLoading, setIsLoading ] = useState(true)
-    const [dateTurn, setDateTurn] = useState(new Date())
-    const [barbersArray, setBarbersArray] = useState([])
+    const [dateTurnSelect, setDateTurnSelect] = useState(new Date())
+
     useEffect(
         () => {
-/*             loadTurnos()
-            .then(function(data){
-                data[0].data.turns = turnos
-                setConsultaApi(data)
-            }) */
+            loadTurnos()
+                .then(function (data) {
+                    setArrayTurnos(data);
+                    console.log(data)
                     setTimeout(() => {
                         setIsLoading(false)
-                    }, 10);
+                    }, 2000)
+                })
         }, [])
+
+    
 
     const useStyles = makeStyles({
       root: {
@@ -152,28 +157,31 @@ function ShiftReservation (props){
       },
     });
 
-
-    function loadTurnos (){
-        let arri = []
-        return new Promise((resolve, reject)=>{
-            //let ref = firebase.db.collection("turnBarber").doc(props.id)
-            let ref = firebase.db.collection("turnBarber").doc('rP9S6JHvTrbaNZZS2Gju')
-            ref.get()
-            .then(snapshots => {
-                arri.push({data: snapshots.data()})
-                /*
-                snapshots.forEach(doc =>{
-                    console.log(doc.data())
-                    arri.push({id: doc.id, data: doc.data()})    
-                })
-                */
-                //console.log('arri',arri)
-                resolve(arri);
+    const loadTurnos = ()=>{
+        var turnos = []
+        return new Promise( resolve => {
+        if(process.env.NODE_ENV === 'production'){ 
+            firebase.db.collection("turnos").where("idBarbero", "==", barberSelect.id)
+            .get()
+            .then(function(querySnapshot) {
+                querySnapshot.forEach(function(doc) {
+                    turnos.push({dia: doc.data().dia, hora: doc.data().hora})
+                });
             })
-            
-            
-        });
+        }else{
+            import('../data/turnos').then( module =>{
+                setArrayTurnos(module.default.turnos);
+            })
+        }
+        resolve(
+            turnos
+            )
+        })}
+    const formatFecha = (value) => {
+        let valueFormat = value.toLocaleDateString()
+        setDateTurnSelect(valueFormat)
     }
+    
     const classes = useStyles();        
     return(
         
@@ -183,10 +191,9 @@ function ShiftReservation (props){
                         <div style={{ display: "inline-flex" }}>
                             <div style={{ boxShadow: "5px 5px 25px", display: "flex", marginLeft:"15%" }}>
                                 <Calendar
-                                value={dateTurn}
+                                value={new Date(dateTurnSelect)}
                                 minDate={new Date()}
-                                maxDate={new Date("Wed Jan 22 2020 00:00:00 GMT-0300")}
-                                onClickDay={(value) => console.log(value)}
+                                onClickDay={(value) => formatFecha(value)}
                                 />
                             </div>
                             <div style={{ marginLeft: "10%", marginRight: "10%" }}>
@@ -207,4 +214,11 @@ function ShiftReservation (props){
     )
 }
 
-export default withRouter(ShiftReservation);
+const mapStateToProps = (state) =>{
+    return {
+        barberSelect: state.barberSelect
+    }
+  }
+  
+
+export default connect(mapStateToProps)(ShiftReservation);
