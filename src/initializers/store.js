@@ -9,19 +9,29 @@ const barberSelectReducer = (state={},action) => {
     }
 }
 
-const dateSelectReducer = (state= new Date(),action) => {
+const diaSelectReducer = (state= new Date(),action) => {
     switch (action.type) {
-        case 'SET_DATE':
-            return action.dateSelect
+        case 'SET_DIA':
+            return action.diaSelect
         default:
              return state;   
+    }
+}
+
+const horaSelectReducer = (state="",action) => {
+    switch (action.type) {
+        case 'SET_HORA':
+            return action.horaSelect
+        default:
+             return state;
     }
 }
 
 
 let rootReducer = combineReducers({
     barberSelect: barberSelectReducer,
-    dateSelect: dateSelectReducer
+    diaSelect: diaSelectReducer,
+    horaSelect: horaSelectReducer    
 });
 
 export default createStore(rootReducer);

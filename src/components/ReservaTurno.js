@@ -116,8 +116,8 @@ function getSteps() {
   return ['Elegí a tu barbero favorito', 'Selecciona día y hora', 'Confirma'];
 }
 
-const ResumenTurno = (props)=>{
-  const { barberSelect } = props.props;
+const ResumenTurno = (state)=>{
+  const { barberSelect, diaSelect, horaSelect } = state.state;
   
   return (
     <div>
@@ -139,7 +139,7 @@ const ResumenTurno = (props)=>{
       id="outlined-full-width"
       label="Fecha del turno"
       style={{ margin: 8 }}
-      placeholder="20/01/2020"
+      placeholder={diaSelect}
       margin="normal"
       InputLabelProps={{
         shrink: true,
@@ -153,7 +153,7 @@ const ResumenTurno = (props)=>{
       id="outlined-full-width"
       label="Horario"
       style={{ margin: 8 }}
-      placeholder="13:00"
+      placeholder={horaSelect}
       margin="normal"
       InputLabelProps={{
         shrink: true,
@@ -167,14 +167,14 @@ const ResumenTurno = (props)=>{
   )
 }
 
-function getStepContent(step, barberos, props) {
+function getStepContent(step, barberos, state) {
   switch (step) {
     case 0:
       return <ListaBarber barberos={barberos}/>
     case 1:
       return <ShiftReservation />;
     case 2:
-      return <ResumenTurno props={props}/>
+      return <ResumenTurno state={state}/>
     default:
       return 'Unknown step';
   }
@@ -248,7 +248,9 @@ return (
 
 const mapStateToProps = (state) =>{
   return {
-      barberSelect: state.barberSelect
+      barberSelect: state.barberSelect,
+      diaSelect: state.diaSelect,
+      horaSelect: state.horaSelect
   }
 }
 
