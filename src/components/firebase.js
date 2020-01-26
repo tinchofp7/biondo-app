@@ -17,7 +17,6 @@ class Firebase {
 		firebase.initializeApp(config)
         this.auth = firebase.auth()  
         this.db = firebase.firestore()
-        this.db.settings({timestampsInSnapshots: true})
 		this.providers = {
 			googleProvider: new firebase.auth.GoogleAuthProvider(),
 			emailAndPass: new firebase.auth.EmailAuthProvider()
@@ -44,16 +43,6 @@ class Firebase {
 		})
 	}
 
-	addQuote(quote) {
-		if(!this.auth.currentUser) {
-			return alert('Not authorized')
-		}
-
-		return this.db.doc(`users_codedamn_video/${this.auth.currentUser.uid}`).set({
-			quote
-		})
-	}
-
 	isInitialized() {
 		return new Promise(resolve => {
 			this.auth.onAuthStateChanged(resolve)
@@ -64,7 +53,25 @@ class Firebase {
 		return this.auth.currentUser && this.auth.currentUser.displayName.split(" ")[0]
 	}
 
+	getCurrentUserPhoto() {
+		return this.auth.currentUser.photoURL
+	}
 
+	getCurrentUserID() {
+		return this.auth.currentUser.uid
+	}
+
+	setNewTurn(turn) {
+		return new Promise((resolve, reject) => {
+			this.db.collection("turnos").add(turn)
+				.then(function (docRef) {
+					resolve(docRef);
+				})
+				.catch(function (error) {
+					reject(error)
+				});
+		})
+	}
 }
 
 export default new Firebase()

@@ -2,17 +2,18 @@ import React, { useEffect, useState } from 'react'
 import { Typography, Paper, Avatar, CircularProgress, Button, Container } from '@material-ui/core'
 import VerifiedUserOutlined from '@material-ui/icons/VerifiedUserOutlined'
 import withStyles from '@material-ui/core/styles/withStyles'
-import firebase from '../firebase'
+import firebase from './firebase'
 import { withRouter } from 'react-router-dom'
-import IconLabelTabs from '../IconLabelTabs';
+import IconLabelTabs from './IconLabelTabs';
 import { blue } from '@material-ui/core/colors'
 
 const styles = theme => ({
 	main: {
 		width: 'auto',
 		display: 'block', // Fix IE 11 issue.
-		marginLeft: theme.spacing.unit * 3,
+		marginLeft: theme.spacing.unit * 6,
 		marginRight: theme.spacing.unit * 3,
+		marginTop: theme.spacing.unit * 10,
 		[theme.breakpoints.up(400 + theme.spacing.unit * 3 * 2)]: {
 			width: 545,
 			marginLeft: 'auto',
@@ -38,17 +39,12 @@ const styles = theme => ({
 
 function Dashboard(props) {
 	const { classes } = props
-
-	
-	const [quote, setQuote] = useState('')
 	
 	useEffect(() => {
 		if(!firebase.getCurrentUsername()) {
 			// not logged in
 			alert('Please login first')
 			props.history.replace('/login')
-		}else{
-			console.log("aa")
 		}
 	})
 
@@ -71,18 +67,12 @@ function Dashboard(props) {
 					className={classes.submit}>
 					Reservá tu turno
           		</Button>
-			</Paper>
-				<IconLabelTabs />
+				</Paper>
 			</Container>
 		</main>
 	)
-
-	async function logout() {
-		await firebase.logout()
-		props.history.push('/')
-	}
 	function goToReservTurn(){
-		props.history.push('/reservar_turno')
+		props.history.push('/reservaDeTurno')
 	}
 }
 

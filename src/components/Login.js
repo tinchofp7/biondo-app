@@ -3,7 +3,7 @@ import { Typography, Paper, Avatar, Button, FormControl, Input, InputLabel } fro
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
 import withStyles from '@material-ui/core/styles/withStyles'
 import { Link, withRouter } from 'react-router-dom'
-import firebase from '../firebase'
+import firebase from './firebase'
 
 const styles = theme => ({
 	main: {
@@ -35,15 +35,13 @@ const styles = theme => ({
 	submit: {
 		marginTop: theme.spacing.unit * 3,
 	},
-})
+});
 
-function Register(props) {
+function SignIn(props) {
 	const { classes } = props
 
-	const [name, setName] = useState('')
 	const [email, setEmail] = useState('')
 	const [password, setPassword] = useState('')
-	const [quote, setQuote] = useState('')
 
 	return (
 		<main className={classes.main}>
@@ -52,55 +50,62 @@ function Register(props) {
 					<LockOutlinedIcon />
 				</Avatar>
 				<Typography component="h1" variant="h5">
-					Register Account
+					Sign in
        			</Typography>
-				<form className={classes.form} onSubmit={e => e.preventDefault() && false }>
-					<FormControl margin="normal" required fullWidth>
-						<InputLabel htmlFor="name">Name</InputLabel>
-						<Input id="name" name="name" autoComplete="off" autoFocus value={name} onChange={e => setName(e.target.value)} />
-					</FormControl>
+				<form className={classes.form} onSubmit={e => e.preventDefault() && false}>
 					<FormControl margin="normal" required fullWidth>
 						<InputLabel htmlFor="email">Email Address</InputLabel>
-						<Input id="email" name="email" autoComplete="off" value={email} onChange={e => setEmail(e.target.value)}  />
+						<Input id="email" name="email" autoComplete="off" autoFocus value={email} onChange={e => setEmail(e.target.value)} />
 					</FormControl>
 					<FormControl margin="normal" required fullWidth>
 						<InputLabel htmlFor="password">Password</InputLabel>
-						<Input name="password" type="password" id="password" autoComplete="off" value={password} onChange={e => setPassword(e.target.value)}  />
+						<Input name="password" type="password" id="password" autoComplete="off" value={password} onChange={e => setPassword(e.target.value)} />
 					</FormControl>
-					<FormControl margin="normal" required fullWidth>
-						<InputLabel htmlFor="quote">Your Favorite Quote</InputLabel>
-						<Input name="quote" type="text" id="quote" autoComplete="off" value={quote} onChange={e => setQuote(e.target.value)}  />
-					</FormControl>
-
 					<Button
 						type="submit"
 						fullWidth
 						variant="contained"
 						color="primary"
-						onClick={onRegister}
+						onClick={login}
 						className={classes.submit}>
-						Register
+						Sign in
           			</Button>
-
 					<Button
 						type="submit"
 						fullWidth
 						variant="contained"
 						color="secondary"
 						component={Link}
-						to="/login"
+						to="/register"
 						className={classes.submit}>
-						Go back to Login
+						Register
+          			</Button>
+					<Button
+						type="submit"
+						fullWidth
+						variant="contained"
+						color="primary"
+						component={Link}
+						onClick={loginWithGoogle}
+						className={classes.submit}>
+						Sign in with Google
           			</Button>
 				</form>
 			</Paper>
 		</main>
 	)
 
-	async function onRegister() {
+	async function login() {
 		try {
-			await firebase.register(name, email, password)
-			await firebase.addQuote(quote)
+			await firebase.login(email, password)
+			props.history.replace('/dashboard')
+		} catch(error) {
+			alert(error.message)
+		}
+	}
+	async function loginWithGoogle() {
+		try {
+			await firebase.loginWithGoogle()
 			props.history.replace('/dashboard')
 		} catch(error) {
 			alert(error.message)
@@ -108,4 +113,4 @@ function Register(props) {
 	}
 }
 
-export default withRouter(withStyles(styles)(Register))
+export default withRouter(withStyles(styles)(SignIn))
