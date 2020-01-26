@@ -57,7 +57,21 @@ class Firebase {
 		return this.auth.currentUser.photoURL
 	}
 
+	getCurrentUserID() {
+		return this.auth.currentUser.uid
+	}
 
+	setNewTurn(turn) {
+		return new Promise((resolve, reject) => {
+			this.db.collection("turnos").add(turn)
+				.then(function (docRef) {
+					resolve(docRef);
+				})
+				.catch(function (error) {
+					reject(error)
+				});
+		})
+	}
 }
 
 export default new Firebase()

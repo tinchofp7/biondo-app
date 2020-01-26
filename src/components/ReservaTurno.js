@@ -1,19 +1,14 @@
-import React, {useState} from 'react';
+import React from 'react';
+import firebase from './firebase'
 import PropTypes from 'prop-types';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
-import Stepper from '@material-ui/core/Stepper';
-import Step from '@material-ui/core/Step';
-import StepLabel from '@material-ui/core/StepLabel';
 import SettingsIcon from '@material-ui/icons/Settings';
 import GroupAddIcon from '@material-ui/icons/GroupAdd';
 import VideoLabelIcon from '@material-ui/icons/VideoLabel';
-import StepConnector from '@material-ui/core/StepConnector';
-import Button from '@material-ui/core/Button';
-import { Typography, TextField} from '@material-ui/core';
+import { Typography, TextField, Stepper, Step, StepLabel, StepConnector, Button, CircularProgress} from '@material-ui/core';
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
-import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import ShiftReservation from './ShiftReservation';
@@ -118,7 +113,7 @@ function getSteps() {
 
 const ResumenTurno = (state)=>{
   const { barberSelect, diaSelect, horaSelect } = state.state;
-  
+  const diaSeteado = diaSelect.split("/");
   return (
     <div>
     <TextField
@@ -139,7 +134,7 @@ const ResumenTurno = (state)=>{
       id="outlined-full-width"
       label="Fecha del turno"
       style={{ margin: 8 }}
-      placeholder={diaSelect}
+      placeholder={diaSeteado[1] + "/" + diaSeteado[0] + "/" + diaSeteado[2]}
       margin="normal"
       InputLabelProps={{
         shrink: true,
@@ -176,11 +171,11 @@ function getStepContent(step, barberos, state) {
     case 2:
       return <ResumenTurno state={state}/>
     default:
-      return 'Unknown step';
+      return <><p>Reservando turno</p><CircularProgress/></>
   }
 }
 const ReservaTurno = (props)=> {
-  const {barberos, history} = props;
+  const {barberos} = props;
 const classes = useStyles();
 const [activeStep, setActiveStep] = React.useState(0);
 const steps = getSteps();
@@ -193,24 +188,68 @@ const handleBack = () => {
   setActiveStep(prevActiveStep => prevActiveStep - 1);
 };
 
-const handleReset = () => {
-  setActiveStep(0);
-};
-
-const MiModal = (props)=>{
-const MySwal = withReactContent(Swal)
-  return(
-    MySwal.fire({
-      title: <p>Tu turno ha sido reservado correctamente</p>,
-      footer: 'Recordá llegar 5 minutos antes del horario reservado',
-      icon:"success",
-      confirmButtonText:"Cerrar",
-      onClose: () => {
-        props.props.history.push('/dashboard')
-      }
-    })
-  )
-}
+  const reservaTurnoFinal = (props) => {
+    const MySwal = withReactContent(Swal);
+    const { barberSelect, diaSelect, horaSelect } = props;
+    const idUser = firebase.getCurrentUserID()
+    const turno = {
+      idBarbero: barberSelect.id,
+      idCliente: idUser,
+      dia: diaSelect,
+      hora: horaSelect,
+      fueAtendido: false,
+    }
+    firebase.setNewTurn(turno)
+      .then(resp => {
+        console.log("Turno creado correctamente: ", resp.id);
+        return (
+          MySwal.fire({
+            title: <p>Tu turno ha sido reservado correctamente</p>,
+            footer: 'Recordá llegar 5 minutos antes del horario reservado',
+            icon: "success",
+            confirmButtonText: "Cerrar",
+            onClose: () => {
+              props.history.push("/")
+            }
+          })
+        )
+      })
+      .catch(function (error) {
+        console.error("Error al añadir turno: ", error);
+        return (
+          MySwal.fire({
+            title: <p>UPS ! Ha ocurrido un error al reservar el turno</p>,
+            footer: 'Lo sentimos',
+            icon: "error",
+            confirmButtonText: "Cerrar",
+            onClose: () => {
+              props.history.push("/")
+            }
+          })
+        )
+      });
+  }
+  const nextIsActive = (props) => {
+    const {barberSelect, horaSelect} = props;
+    switch (activeStep) {
+      case 0:
+        if (barberSelect.id == null) {
+          return true
+        } else {
+          return false
+        }
+      case 1:
+        if (horaSelect == "") {
+          return true
+        } else {
+          return false
+        }
+      case 2:
+        return false
+      default:
+        return true
+    }
+  }
 return (
   <div className={classes.root}>
     <Stepper alternativeLabel activeStep={activeStep} connector={<ColorlibConnector />}>
@@ -221,9 +260,6 @@ return (
       ))}
     </Stepper>
     <div>
-      {activeStep === steps.length ? (
-        <MiModal props={props}/>  
-      ) : (
         <div style={{textAlign: "center"}}>
           <Typography variant="overline" className={classes.instructions}>{getStepContent(activeStep, barberos, props)}</Typography>
           <div>
@@ -233,14 +269,14 @@ return (
             <Button
               variant="contained"
               color="primary"
-              onClick={handleNext}
+              onClick={activeStep === steps.length ? reservaTurnoFinal(props) : handleNext}
               className={classes.button}
+              disabled={nextIsActive(props)}
             >
               {activeStep === steps.length - 1 ? 'Reservar' : 'Siguiente'}
             </Button>
           </div>
-        </div>
-      )}
+        </div>  
     </div>
   </div>
 );

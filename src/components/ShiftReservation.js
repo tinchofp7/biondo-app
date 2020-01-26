@@ -1,12 +1,12 @@
 import React, { useEffect, useState} from 'react';
-import {withRouter } from 'react-router-dom';
-import firebase from './firebase'
-import {CircularProgress } from '@material-ui/core'
-import Calendar from 'react-calendar';
-import Chip from '@material-ui/core/Chip';
-import Grid from '@material-ui/core/Grid';
-import { makeStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux';
+import {withRouter } from 'react-router-dom';
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
+import firebase from './firebase'
+import {CircularProgress, Chip, Grid } from '@material-ui/core'
+import Calendar from 'react-calendar';
+import { makeStyles } from '@material-ui/core/styles';
 
 
 const ShiftReservation = (props) =>{
@@ -15,33 +15,19 @@ const ShiftReservation = (props) =>{
     const t2 = new Date("2019-11-30 20:30");
     let turnos = [];
 
-    
     while(t1.getTime() <= t2.getTime()){
         turnos.push(t1.getHours() +':'+(t1.getMinutes() == 0? "00" : t1.getMinutes() ))
         t1.setMinutes(t1.getMinutes() + 30);
     }
     
-    
     //t.setSeconds(t.getSeconds() + 10);
     //const rangoLaboral = 
     //de Lunes a Sabados de 13:00 a 21:00
     const mapa =[
-        {hora:"13:00"},
-        {hora:"13:30"},
-        {hora:"14:00"},
-        {hora:"14:30"},
-        {hora:"15:00"},
-        {hora:"15:30"},
-        {hora:"16:00"},
-        {hora:"16:30"},
-        {hora:"17:00"},
-        {hora:"17:30"},
-        {hora:"18:00"},
-        {hora:"18:30"},
-        {hora:"19:00"},
-        {hora:"19:30"},
-        {hora:"20:00"},
-        {hora:"20:30"}
+        {hora:"13:00"},{hora:"13:30"},{hora:"14:00"},{hora:"14:30"},
+        {hora:"15:00"},{hora:"15:30"},{hora:"16:00"},{hora:"16:30"},
+        {hora:"17:00"},{hora:"17:30"},{hora:"18:00"},{hora:"18:30"},
+        {hora:"19:00"},{hora:"19:30"},{hora:"20:00"},{hora:"20:30"}
     ]
 
     const fechaFormateada = new Date();
@@ -124,6 +110,18 @@ const ShiftReservation = (props) =>{
             }
             return turnosFinal
     }
+
+    const miModal = (props)=>{
+        const MySwal = withReactContent(Swal)
+          return(
+            MySwal.fire({
+              title: <p>Este turno ya ha sido dado</p>,
+              footer: 'Selecciona otro horario',
+              icon:"warning",
+              confirmButtonText:"Cerrar",
+            })
+          )
+        }
     return(
         
         <>
@@ -144,7 +142,7 @@ const ShiftReservation = (props) =>{
                                         return(<Grid key={turno.hora} item xs={12} sm={6} md={3}  >
                                             <Chip color={turno.isReservado ? "secondary" : "primary"}
                                             style={{ fontSize: "18px", display: "flex", height: "100%" }}
-                                            onClick={() => setTimeSelect(turno.hora)}
+                                            onClick={() => turno.isReservado ? miModal() : setTimeSelect(turno.hora)}
                                             label={turno.hora} />
                                         </Grid>)
                                         }

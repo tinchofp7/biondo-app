@@ -45,8 +45,6 @@ function Dashboard(props) {
 			// not logged in
 			alert('Please login first')
 			props.history.replace('/login')
-		}else{
-			console.log("aa")
 		}
 	})
 
