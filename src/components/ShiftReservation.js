@@ -30,10 +30,11 @@ const ShiftReservation = (props) =>{
         {hora:"19:00"},{hora:"19:30"},{hora:"20:00"},{hora:"20:30"}
     ]
 
-    const fechaFormateada = new Date();
+    let fechaFormateada = new Date();
+    let fechaFinal = fechaFormateada.getMonth()+1 + "/" + fechaFormateada.getDate() + "/" + fechaFormateada.getFullYear();
     const [arrayTurnos, setArrayTurnos ] = useState([]);
     const [isLoading, setIsLoading ] = useState(true);
-    const [dateTurnSelect, setDateTurnSelect] = useState(fechaFormateada.toLocaleDateString());
+    const [dateTurnSelect, setDateTurnSelect] = useState(fechaFinal);
     const [timeTurnSelect, setTimeSelect] = useState("");
 
     props.saveDia(dateTurnSelect);
@@ -47,7 +48,7 @@ const ShiftReservation = (props) =>{
                     console.log(data)
                     setTimeout(() => {
                         setIsLoading(false)
-                    }, 2000)
+                    })
                 })
         }, [])
 
@@ -84,7 +85,7 @@ const ShiftReservation = (props) =>{
             )
         })}
     const formatFecha = (value) => {
-        let valueFormat = value.toLocaleDateString();
+        let valueFormat = value.getMonth()+1 + "/" + value.getDate() + "/" + value.getFullYear();
         setTimeSelect("")
         setDateTurnSelect(valueFormat)
     }
