@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Typography, Paper, Avatar, Button, FormControl, Input, InputLabel } from '@material-ui/core'
+import { Typography, Paper, Avatar, Button, FormControl, Input, InputLabel, CardMedia } from '@material-ui/core'
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
 import withStyles from '@material-ui/core/styles/withStyles'
 import { Link, withRouter } from 'react-router-dom'
@@ -46,19 +46,21 @@ function SignIn(props) {
 	return (
 		<main className={classes.main}>
 			<Paper className={classes.paper}>
-				<Avatar className={classes.avatar}>
-					<LockOutlinedIcon />
-				</Avatar>
+				<CardMedia
+					component="img"
+					image="biondox.jpg"
+					title="Biondo"
+					height="100em"
+				/>
 				<Typography component="h1" variant="h5">
-					Sign in
        			</Typography>
 				<form className={classes.form} onSubmit={e => e.preventDefault() && false}>
 					<FormControl margin="normal" required fullWidth>
-						<InputLabel htmlFor="email">Email Address</InputLabel>
+						<InputLabel htmlFor="email">Correo electrónico</InputLabel>
 						<Input id="email" name="email" autoComplete="off" autoFocus value={email} onChange={e => setEmail(e.target.value)} />
 					</FormControl>
 					<FormControl margin="normal" required fullWidth>
-						<InputLabel htmlFor="password">Password</InputLabel>
+						<InputLabel htmlFor="password">Contraseña</InputLabel>
 						<Input name="password" type="password" id="password" autoComplete="off" value={password} onChange={e => setPassword(e.target.value)} />
 					</FormControl>
 					<Button
@@ -68,7 +70,7 @@ function SignIn(props) {
 						color="primary"
 						onClick={login}
 						className={classes.submit}>
-						Sign in
+						Iniciar sesión
           			</Button>
 					<Button
 						type="submit"
@@ -78,7 +80,7 @@ function SignIn(props) {
 						component={Link}
 						to="/register"
 						className={classes.submit}>
-						Register
+						Registrate
           			</Button>
 					<Button
 						type="submit"
@@ -88,7 +90,7 @@ function SignIn(props) {
 						component={Link}
 						onClick={loginWithGoogle}
 						className={classes.submit}>
-						Sign in with Google
+						Iniciar sesión con tu cuenta de Google
           			</Button>
 				</form>
 			</Paper>

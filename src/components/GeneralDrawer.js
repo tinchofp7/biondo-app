@@ -150,7 +150,7 @@ export default function MiniDrawer(props) {
         </div>
         <Divider />
         <List>
-          {['Perfil', 'Turnos', 'Acerca de'].map((text, index) => (
+          {['Quienes somos', 'Cómo llegar', 'Perfil', 'Turnos', 'Historial'].map((text, index) => (
             <ListItem button key={text}>
               <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
               <ListItemText primary={text} />

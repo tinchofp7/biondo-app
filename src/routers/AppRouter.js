@@ -10,8 +10,6 @@ import NotFound from '../components/NotFound';
 import Login from '../components/Login';
 import Dashboard from '../components/Dashboard';
 import SelectBarber from '../components/SelectBarber';
-import Home from '../components/Home';
-import ShiftReservation from '../components/ShiftReservation'
 import GeneralDrawer from '../components/GeneralDrawer';
 
 /* const URL = 'http://localhost:3000/'; */
@@ -40,7 +38,7 @@ const AppRouter = () => {
                             {console.log('PUBLIC_URL:', process.env.PUBLIC_URL)}
                             <Route path={`${process.env.PUBLIC_URL}/login`} render={(props) => !isLogin() ? (<Login {...props} url={URL} />) : (<GeneralDrawer {...props} url={URL} /> , <Dashboard {...props} url={URL} />)} />
                             <Route path={`${process.env.PUBLIC_URL}/register`} render={(props) => !isLogin() ? (<Register {...props} url={URL} />) : (<GeneralDrawer {...props} url={URL} /> , <Dashboard {...props} url={URL} />)} />
-                            <Route path={`${process.env.PUBLIC_URL}/`} render={(props) => !isLogin() ? (<Home {...props} url={URL} />) : ([<GeneralDrawer {...props} url={URL} />, <Dashboard {...props} url={URL} />])} exact={true} />
+                            <Route path={`${process.env.PUBLIC_URL}/`} render={(props) => !isLogin() ? (<Login {...props} url={URL} />) : ([<GeneralDrawer {...props} url={URL} />, <Dashboard {...props} url={URL} />])} exact={true} />
                             <Route path={`${process.env.PUBLIC_URL}/dashboard`} render={(props) => [<GeneralDrawer {...props} url={URL} />, <Dashboard {...props} url={URL} />]} />
                             <Route path={`${process.env.PUBLIC_URL}/reservaDeTurno`} render={(props) => [<GeneralDrawer {...props} url={URL} />, <SelectBarber {...props} url={URL} />]} />
                             <Route component={NotFound} />

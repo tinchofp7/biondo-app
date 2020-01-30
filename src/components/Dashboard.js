@@ -4,7 +4,6 @@ import VerifiedUserOutlined from '@material-ui/icons/VerifiedUserOutlined'
 import withStyles from '@material-ui/core/styles/withStyles'
 import firebase from './firebase'
 import { withRouter } from 'react-router-dom'
-import IconLabelTabs from './IconLabelTabs';
 import { blue } from '@material-ui/core/colors'
 
 const styles = theme => ({
@@ -39,6 +38,7 @@ const styles = theme => ({
 
 function Dashboard(props) {
 	const { classes } = props
+	const { isLoading, setIsLoading } = useState(true);
 	
 	useEffect(() => {
 		if(!firebase.getCurrentUsername()) {
@@ -48,7 +48,29 @@ function Dashboard(props) {
 		}
 	})
 
+	const isAdmino = () => {
+		return new Promise(resolve => {
+			const uid = firebase.getCurrentUserID()
+			firebase.db.collection("turnBarber").doc(uid)
+				.get()
+				.then(function (resp) {
+					if (resp.exists) {
+						return true
+					} else {
+						return false
+					}
+				})
+		}
+		)
+	}
+	
 	return (
+		<>
+		{isLoading ? <CircularProgress />
+		:		
+		(<>
+		{isAdmino() ? <div><p>Aca va el componente que renderea la lista de turnos dados</p></div>
+		: 
 		<main className={classes.main}>
 			<Container fixed>
 			<Paper className={classes.paper}>
@@ -69,8 +91,12 @@ function Dashboard(props) {
           		</Button>
 				</Paper>
 			</Container>
-		</main>
+		</main>}
+			</>)}
+		</>
+		
 	)
+
 	function goToReservTurn(){
 		props.history.push('/reservaDeTurno')
 	}
