@@ -39,13 +39,18 @@ const styles = theme => ({
 function Dashboard(props) {
 	const { classes } = props
 	const { isLoading, setIsLoading } = useState(true);
-	
+	const [ isAdmin, setIsAdmin ] = useState(true);
 	useEffect(() => {
 		if(!firebase.getCurrentUsername()) {
 			// not logged in
 			alert('Please login first')
 			props.history.replace('/login')
 		}
+		async function ver(){
+			const admin = await isAdmino();
+			setIsAdmin(admin);
+		}
+		ver();
 	})
 
 	const isAdmino = () => {
@@ -55,9 +60,9 @@ function Dashboard(props) {
 				.get()
 				.then(function (resp) {
 					if (resp.exists) {
-						return true
+						resolve(true)
 					} else {
-						return false
+						resolve(false)
 					}
 				})
 		}
@@ -69,7 +74,7 @@ function Dashboard(props) {
 		{isLoading ? <CircularProgress />
 		:		
 		(<>
-		{isAdmino() ? <div><p>Aca va el componente que renderea la lista de turnos dados</p></div>
+		{isAdmin ? <div><p>Aca va el componente que renderea la lista de turnos dados</p></div>
 		: 
 		<main className={classes.main}>
 			<Container fixed>
