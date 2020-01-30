@@ -6,6 +6,8 @@ import firebase from './firebase'
 import { withRouter } from 'react-router-dom'
 import { blue } from '@material-ui/core/colors'
 
+import ListaTurnos from './ListaTurnos';
+
 const styles = theme => ({
 	main: {
 		width: 'auto',
@@ -38,8 +40,9 @@ const styles = theme => ({
 
 function Dashboard(props) {
 	const { classes } = props
-	const { isLoading, setIsLoading } = useState(true);
+	const [ isLoading, setIsLoading ] = useState(true);
 	const [ isAdmin, setIsAdmin ] = useState(true);
+	
 	useEffect(() => {
 		if(!firebase.getCurrentUsername()) {
 			// not logged in
@@ -49,6 +52,7 @@ function Dashboard(props) {
 		async function ver(){
 			const admin = await isAdmino();
 			setIsAdmin(admin);
+			setIsLoading(false)
 		}
 		ver();
 	})
@@ -71,10 +75,10 @@ function Dashboard(props) {
 	
 	return (
 		<>
-		{isLoading ? <CircularProgress />
+		{isLoading ? <CircularProgress className={classes.main}/>
 		:		
 		(<>
-		{isAdmin ? <div><p>Aca va el componente que renderea la lista de turnos dados</p></div>
+		{isAdmin ? <ListaTurnos />
 		: 
 		<main className={classes.main}>
 			<Container fixed>
