@@ -48,7 +48,7 @@ const ShiftReservation = (props) =>{
                     console.log(data)
                     setTimeout(() => {
                         setIsLoading(false)
-                    })
+                    }, 1000)
                 })
         }, [])
 

@@ -42,6 +42,7 @@ function Dashboard(props) {
 	const { classes } = props
 	const [ isLoading, setIsLoading ] = useState(true);
 	const [ isAdmin, setIsAdmin ] = useState(true);
+	const [ proximoTurno, setProximoTurno ] = useState(null);
 	
 	useEffect(() => {
 		if(!firebase.getCurrentUsername()) {
@@ -54,6 +55,12 @@ function Dashboard(props) {
 			setIsAdmin(admin);
 			setIsLoading(false)
 		}
+		async function proximoTurno(){
+			const uid = firebase.getCurrentUserID()
+			const resp = await firebase.getNextBookingUser(uid);
+			setProximoTurno(resp);
+		}
+		proximoTurno()
 		ver();
 	})
 
@@ -96,10 +103,18 @@ function Dashboard(props) {
 					color="primary"
 					onClick={goToReservTurn}
 					className={classes.submit}>
-					Reservá tu turno
+					Reservá tu turno {proximoTurno.id}
           		</Button>
 				</Paper>
 			</Container>
+			{!!proximoTurno.dia &&
+			<Container fixed>
+			<Paper className={classes.paper}>
+				<Typography component="h1" variant="h5">
+					Próximo turno: {proximoTurno.dia + " " + proximoTurno.hora}
+				</Typography>
+				</Paper>
+			</Container>}
 		</main>}
 			</>)}
 		</>
