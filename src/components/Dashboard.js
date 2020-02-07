@@ -103,7 +103,7 @@ function Dashboard(props) {
 					color="primary"
 					onClick={goToReservTurn}
 					className={classes.submit}>
-					Reservá tu turno {proximoTurno.id}
+					Reservá tu turno
           		</Button>
 				</Paper>
 			</Container>

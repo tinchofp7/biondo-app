@@ -1,11 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Component } from 'react';
 import firebase from './firebase';
 import withStyles from '@material-ui/core/styles/withStyles';
 import MaterialTable from 'material-table';
 import { ChevronLeft, ChevronRight} from '@material-ui/icons';
 import {CircularProgress, Avatar, Typography} from '@material-ui/core';
 import DoneIcon from '@material-ui/icons/Done';
-
+import Button from '@material-ui/core/Button';
+import Swal from 'sweetalert2';
 
 
 const styles = theme => ({
@@ -99,8 +100,70 @@ const ListaTurnos = (props) => {
     cargaTurnos()
   }
 
-  return (
-    <div className={classes.main}>
+    function addBarbero(){
+
+
+    (async () => {
+     
+            const { value: nombre } = await Swal.fire({
+              title: 'Ingresar Nombre',
+              input: 'text',      
+              showCancelButton: true,
+              inputValidator: (value) => {
+                if (!value) {
+                  return 'Necesitas escribir un nombre!'
+                }
+              }
+              
+            })
+            
+            
+            if (nombre) {   
+                    const { value: apellido } = await Swal.fire({
+                        title: 'Ingresar Apellido',
+                        input: 'text',      
+                        showCancelButton: true,
+                        inputValidator: (value) => {
+                              if (!value) {
+                                return 'Necesitas escribir un apellido!'
+                              }
+                        }
+                    })
+                    
+                      if (apellido) {
+                        
+                              const { value: photoUrl } = await Swal.fire({
+                                title: 'Ingresar Url de foto',
+                                input: 'text',      
+                                showCancelButton: true,
+                                    inputValidator: (value) => {
+                                          if (!value) {
+                                            return 'Necesitas escribir una URL!'
+                                          }                                   
+                                                                            
+                                    }
+
+                              })
+                              if(photoUrl) {
+                                firebase.db.collection("turnBarber").doc().set({
+                                  name: nombre,
+                                  lastname: apellido,
+                                  photoUrl: photoUrl
+                                })
+
+                                Swal.fire(
+                                'Barbero agregado correctamente',
+                                'Se añadió a la colección',
+                                'success' 
+                                )
+                              }
+                      }
+                      
+             }              
+    })()};
+   
+  return (        
+        <div className={classes.main}>
       {isLoading ? <CircularProgress/> :
       <>
           <MaterialTable
@@ -112,11 +175,11 @@ const ListaTurnos = (props) => {
                 emptyDataSourceMessage: "No existen turnos"
               },
               header: {
-                actions: "Acciones"
+                actions: "Atendido"
               },
               toolbar: {
                 searchPlaceholder: "Buscar"
-              }
+              }             
             }}
             actions={[
               {
@@ -139,8 +202,9 @@ const ListaTurnos = (props) => {
                 textAlign: "center"
               }
             }}
+
             editable={{
-              onRowAdd: newData =>
+              onRowAdd:  newData =>
                 new Promise(resolve => {
                   setTimeout(() => {
                     resolve();
@@ -152,10 +216,20 @@ const ListaTurnos = (props) => {
                   }, 600);
                 })
             }}
+                     
           />
+          <div className={classes.root}>
+      
+              <Button variant="contained" color="secondary" onClick={addBarbero}>
+                Agregar Barbero
+              </Button>
+          </div> 
+           
       </>}
     </div>
+    
   )
 }
 
 export default withStyles(styles)(ListaTurnos)
+

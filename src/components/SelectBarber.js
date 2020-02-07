@@ -43,7 +43,7 @@ function SelectBarber (props){
     function loadBarbers (){
         var barberos = []
         return new Promise( resolve => {
-        if(process.env.NODE_ENV === 'production'){ 
+        if(process.env.NODE_ENV === 'development'){ 
             firebase.db.collection("turnBarber").get()
             .then(function(querySnapshot) {
                 querySnapshot.forEach(function(doc) {
