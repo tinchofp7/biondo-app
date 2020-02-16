@@ -94,12 +94,13 @@ export default function MiniDrawer(props) {
   async function logout() {
     await firebase.logout()
     props.history.push('/')
-}
-    const userPhoto = ()=>{
-      if(firebase.isInitialized()){
-        return firebase.getCurrentUserPhoto();
-      }
+  }
+  
+  const userPhoto = ()=>{
+    if(firebase.isInitialized()){
+      return firebase.getCurrentUserPhoto();
     }
+  }
 
   return (
     <div className={classes.root}>
@@ -122,7 +123,9 @@ export default function MiniDrawer(props) {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" className={classes.content}>
-            BiondoApp
+            <Link href="/" color="inherit"> 
+              BiondoApp
+            </Link> 
           </Typography>
           <Avatar alt="Remy Sharp" src={userPhoto()} />
           <IconButton key="icc" onClick={() => logout()}>
