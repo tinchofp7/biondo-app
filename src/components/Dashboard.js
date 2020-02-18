@@ -6,6 +6,8 @@ import firebase from './firebase'
 import { withRouter } from 'react-router-dom'
 import { blue } from '@material-ui/core/colors'
 
+import ListaTurnos from './ListaTurnos';
+
 const styles = theme => ({
 	main: {
 		width: 'auto',
@@ -38,7 +40,9 @@ const styles = theme => ({
 
 function Dashboard(props) {
 	const { classes } = props
-	const { isLoading, setIsLoading } = useState(true);
+	const [ isLoading, setIsLoading ] = useState(true);
+	const [ isAdmin, setIsAdmin ] = useState(true);
+	const [ proximoTurno, setProximoTurno ] = useState(null);
 	
 	useEffect(() => {
 		if(!firebase.getCurrentUsername()) {
@@ -46,6 +50,18 @@ function Dashboard(props) {
 			alert('Please login first')
 			props.history.replace('/login')
 		}
+		async function ver(){
+			const admin = await isAdmino();
+			setIsAdmin(admin);
+			setIsLoading(false)
+		}
+		async function proximoTurno(){
+			const uid = firebase.getCurrentUserID()
+			const resp = await firebase.getNextBookingUser(uid);
+			setProximoTurno(resp);
+		}
+		proximoTurno()
+		ver();
 	})
 
 	const isAdmino = () => {
@@ -55,9 +71,9 @@ function Dashboard(props) {
 				.get()
 				.then(function (resp) {
 					if (resp.exists) {
-						return true
+						resolve(true)
 					} else {
-						return false
+						resolve(false)
 					}
 				})
 		}
@@ -66,10 +82,10 @@ function Dashboard(props) {
 	
 	return (
 		<>
-		{isLoading ? <CircularProgress />
+		{isLoading ? <CircularProgress className={classes.main}/>
 		:		
 		(<>
-		{isAdmino() ? <div><p>Aca va el componente que renderea la lista de turnos dados</p></div>
+		{isAdmin ? <ListaTurnos />
 		: 
 		<main className={classes.main}>
 			<Container fixed>
@@ -91,6 +107,14 @@ function Dashboard(props) {
           		</Button>
 				</Paper>
 			</Container>
+			{!!proximoTurno.dia &&
+			<Container fixed>
+			<Paper className={classes.paper}>
+				<Typography component="h1" variant="h5">
+					Próximo turno: {proximoTurno.dia + " " + proximoTurno.hora}
+				</Typography>
+				</Paper>
+			</Container>}
 		</main>}
 			</>)}
 		</>

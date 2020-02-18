@@ -192,14 +192,19 @@ const handleBack = () => {
     const MySwal = withReactContent(Swal);
     const { barberSelect, diaSelect, horaSelect } = props;
     const idUser = firebase.getCurrentUserID()
+    const nameUser = firebase.getCurrentUsernameComplete()
+    const photoUrl = firebase.getCurrentUserPhoto()
     const turno = {
       idBarbero: barberSelect.id,
+      nombreBarbero: barberSelect.nombre + " " + barberSelect.apellido,
       idCliente: idUser,
+      nombreCliente: nameUser,
+      avatarCliente: photoUrl,
       dia: diaSelect,
       hora: horaSelect,
       fueAtendido: false,
     }
-    firebase.setNewTurn(turno)
+    firebase.setNewBooking(turno)
       .then(resp => {
         console.log("Turno creado correctamente: ", resp.id);
         return (
