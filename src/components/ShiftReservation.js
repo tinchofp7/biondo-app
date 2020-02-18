@@ -67,7 +67,7 @@ const ShiftReservation = (props) =>{
     const loadTurnos = ()=>{
         var turnos = []
         return new Promise( resolve => {
-        if(process.env.NODE_ENV === 'development'){ 
+        if(process.env.REACT_APP_NODE_ENV == 'production'){ 
             firebase.db.collection("turnos").where("idBarbero", "==", barberSelect.id)
             .get()
             .then(function(querySnapshot) {
