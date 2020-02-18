@@ -35,7 +35,7 @@ const AppRouter = () => {
                 <BrowserRouter>
                     <div>
                         <Switch>
-                            {console.log('PUBLIC_URL:', process.env.PUBLIC_URL)}
+                            {console.log('PUBLIC_URL:', process.env.REACT_APP_PUBLIC_URL)}
                             <Route path={`${process.env.PUBLIC_URL}/login`} render={(props) => !isLogin() ? (<Login {...props} url={URL} />) : (<GeneralDrawer {...props} url={URL} /> , <Dashboard {...props} url={URL} />)} />
                             <Route path={`${process.env.PUBLIC_URL}/register`} render={(props) => !isLogin() ? (<Register {...props} url={URL} />) : (<GeneralDrawer {...props} url={URL} /> , <Dashboard {...props} url={URL} />)} />
                             <Route path={`${process.env.PUBLIC_URL}/`} render={(props) => !isLogin() ? (<Login {...props} url={URL} />) : ([<GeneralDrawer {...props} url={URL} />, <Dashboard {...props} url={URL} />])} exact={true} />

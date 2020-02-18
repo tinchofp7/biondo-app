@@ -2,14 +2,14 @@ import firebase from 'firebase'
 import 'firebase/auth'  
 
 const config = {
-    apiKey: "AIzaSyDtobeLfzL1H_YrZgypo6UxNIaqR6oEoKA",
-    authDomain: "biondo-auth.firebaseapp.com",
-    databaseURL: "https://biondo-auth.firebaseio.com",
-    projectId: "biondo-auth",
-    storageBucket: "biondo-auth.appspot.com",
-    messagingSenderId: "251692779872",
-    appId: "1:251692779872:web:b49d12a7db401fced6f605",
-    measurementId: "G-EV27LSJV79"
+    apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
+    authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
+    databaseURL: process.env.REACT_APP_FIREBASE_DATABASE_URL,
+    projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
+    storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET,
+    messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID,
+    appId: process.env.REACT_APP_FIREBASE_APP_ID,
+    measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENT_ID
 }
 
 class Firebase {
