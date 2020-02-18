@@ -1,11 +1,7 @@
 import React, {useState} from 'react';
-import PropTypes from 'prop-types';
-import { makeStyles, withStyles } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import { Typography, CardMedia, CardContent, CardActionArea, Card, } from '@material-ui/core';
-import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-
-import ReservaTurno from './ReservaTurno'
 
 const useStyles = makeStyles(theme => ({
     card: {

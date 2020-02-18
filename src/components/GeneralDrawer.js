@@ -7,10 +7,14 @@ import Typography from '@material-ui/core/Typography';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
-import MailIcon from '@material-ui/icons/Mail';
+import LocationOnIcon from '@material-ui/icons/LocationOn';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import Avatar from '@material-ui/core/Avatar';
+import InfoIcon from '@material-ui/icons/Info';
+import AccountBoxIcon from '@material-ui/icons/AccountBox';
+import TurnedInIcon from '@material-ui/icons/TurnedIn';
+import HistoryIcon from '@material-ui/icons/History';
+
 
 import firebase from './firebase'
 
@@ -21,23 +25,21 @@ const useStyles = makeStyles(theme => ({
     display: 'flex',
   },
   appBar: {
-    zIndex: theme.zIndex.drawer + 1,
-    transition: theme.transitions.create(['width', 'margin'], {
+    transition: theme.transitions.create(['margin', 'width'], {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
     }),
-
   },
   appBarShift: {
-    marginLeft: drawerWidth,
     width: `calc(100% - ${drawerWidth}px)`,
-    transition: theme.transitions.create(['width', 'margin'], {
-      easing: theme.transitions.easing.sharp,
+    marginLeft: drawerWidth,
+    transition: theme.transitions.create(['margin', 'width'], {
+      easing: theme.transitions.easing.easeOut,
       duration: theme.transitions.duration.enteringScreen,
     }),
   },
   menuButton: {
-    marginRight: 36,
+    marginRight: theme.spacing(1),
   },
   hide: {
     display: 'none',
@@ -45,36 +47,35 @@ const useStyles = makeStyles(theme => ({
   drawer: {
     width: drawerWidth,
     flexShrink: 0,
-    whiteSpace: 'nowrap',
   },
-  drawerOpen: {
+  drawerPaper: {
     width: drawerWidth,
-    transition: theme.transitions.create('width', {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
   },
-  drawerClose: {
-    transition: theme.transitions.create('width', {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-    overflowX: 'hidden',
-    width: theme.spacing(7) + 1,
-    [theme.breakpoints.up('sm')]: {
-      width: theme.spacing(9) + 1,
-    },
-  },
-  toolbar: {
-    display: 'inline-flex',
+  drawerHeader: {
+    display: 'flex',
     alignItems: 'center',
-    justifyContent: 'flex-end',
     padding: theme.spacing(0, 1),
     ...theme.mixins.toolbar,
+    justifyContent: 'flex-end',
   },
   content: {
     flexGrow: 1,
-    padding: theme.spacing(1),
+    padding: theme.spacing(3),
+    transition: theme.transitions.create('margin', {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen,
+    }),
+    marginLeft: -drawerWidth,
+  },
+  contentBiondo: {
+    flexGrow: 1,
+  },
+  contentShift: {
+    transition: theme.transitions.create('margin', {
+      easing: theme.transitions.easing.easeOut,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
+    marginLeft: 0,
   },
 }));
 
@@ -93,12 +94,44 @@ export default function MiniDrawer(props) {
 
   async function logout() {
     await firebase.logout()
-    props.history.push('/')
+    props.history.push('/login')
   }
   
   const userPhoto = ()=>{
     if(firebase.isInitialized()){
       return firebase.getCurrentUserPhoto();
+    }
+  }
+
+  const obtenerLink = (index)=>{
+    switch (index) {
+      case 0:
+        return "https://www.facebook.com/pg/biondobarberialp/about/"
+      case 1:
+        return "https://www.google.com/maps/dir//biondo+peluqueria+la+plata/@-34.9190624,-57.9690593,13.75z/data=!4m9!4m8!1m1!4e2!1m5!1m1!1s0x95a2e624ae2b012f:0x4220365739a0261e!2m2!1d-57.945293!2d-34.9179271"
+      case 2:
+      case 3:
+      case 4:
+        return "#"
+      default:
+        return "#"
+    }
+  }
+
+  const obtenerIcono = (index)=>{
+    switch (index) {
+      case 0:
+        return <InfoIcon/>
+      case 1:
+        return <LocationOnIcon/>
+      case 2:
+        return <AccountBoxIcon/>
+      case 3:
+        return <TurnedInIcon/>
+      case 4:
+        return <HistoryIcon/>
+      default:
+        return <AccountBoxIcon/>
     }
   }
 
@@ -116,13 +149,11 @@ export default function MiniDrawer(props) {
             aria-label="open drawer"
             onClick={handleDrawerOpen}
             edge="start"
-            className={clsx(classes.menuButton, {
-              [classes.hide]: open,
-            })}
+            className={clsx(classes.menuButton, open && classes.hide)}
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" className={classes.content}>
+          <Typography variant="h6" className={classes.contentBiondo}>
             <Link href="/" color="inherit"> 
               BiondoApp
             </Link> 
@@ -134,16 +165,12 @@ export default function MiniDrawer(props) {
         </Toolbar>
       </AppBar>
       <Drawer
-        variant="permanent"
-        className={clsx(classes.drawer, {
-          [classes.drawerOpen]: open,
-          [classes.drawerClose]: !open,
-        })}
+        className={classes.drawer}
+        variant="persistent"
+        anchor="left"
+        open={open}
         classes={{
-          paper: clsx({
-            [classes.drawerOpen]: open,
-            [classes.drawerClose]: !open,
-          }),
+          paper: classes.drawerPaper,
         }}
       >
         <div className={classes.toolbar}>
@@ -154,10 +181,12 @@ export default function MiniDrawer(props) {
         <Divider />
         <List>
           {['Quienes somos', 'Cómo llegar', 'Perfil', 'Turnos', 'Historial'].map((text, index) => (
+            <Link href={obtenerLink(index)} target="_blank" rel="noopener">           
             <ListItem button key={text}>
-              <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
+              <ListItemIcon>{obtenerIcono(index)}</ListItemIcon>
               <ListItemText primary={text} />
             </ListItem>
+            </Link>
           ))}
         </List>
       </Drawer>

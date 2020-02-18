@@ -45,9 +45,8 @@ function Dashboard(props) {
 	const [ proximoTurno, setProximoTurno ] = useState(null);
 	
 	useEffect(() => {
-		if(!firebase.getCurrentUsername()) {
+		if(!firebase.auth.currentUser) {
 			// not logged in
-			alert('Please login first')
 			props.history.replace('/login')
 		}
 		async function ver(){
@@ -78,6 +77,10 @@ function Dashboard(props) {
 				})
 		}
 		)
+	}
+	const fechaFormateada = (dia)=>{
+		let date = new Date(dia);
+		return date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear();
 	}
 	
 	return (
@@ -111,7 +114,7 @@ function Dashboard(props) {
 			<Container fixed>
 			<Paper className={classes.paper}>
 				<Typography component="h1" variant="h5">
-					Próximo turno: {proximoTurno.dia + " " + proximoTurno.hora}
+					Próximo turno: {fechaFormateada(proximoTurno.dia) + " " + proximoTurno.hora + "hs"}
 				</Typography>
 				</Paper>
 			</Container>}

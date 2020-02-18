@@ -103,7 +103,7 @@ const useStyles = makeStyles(theme => ({
   instructions: {
     marginTop: theme.spacing(1),
     marginBottom: theme.spacing(1),
-    marginLeft: theme.spacing(10),
+    marginLeft: theme.spacing(1),
   }
 }));
 
@@ -244,7 +244,7 @@ const handleBack = () => {
           return false
         }
       case 1:
-        if (horaSelect == "") {
+        if (horaSelect === "") {
           return true
         } else {
           return false

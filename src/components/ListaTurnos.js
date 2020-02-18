@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import firebase from './firebase';
 import withStyles from '@material-ui/core/styles/withStyles';
 import MaterialTable from 'material-table';
@@ -28,10 +28,9 @@ const styles = theme => ({
 const ListaTurnos = (props) => {
   const { classes } = props
   const [isLoading, setIsLoading] = useState(true);
-  const [isLoadingRec, setIsLoadingRec] = useState(false)
   const [state, setState] = useState({
     columns: [
-    { title: 'Cliente', field: 'avatarCliente', type: 'url', render: rowData => {return(
+    { title: 'Cliente', field: 'avatarCliente', type: 'string', render: rowData => {return(
       <>
       <Avatar alt={rowData.nombreCliente} src={rowData.avatarCliente} className={classes.large}/>
       <Typography variant="subtitle2" style={{display: "ruby-text", marginBottom:"3%"}}>
@@ -100,67 +99,66 @@ const ListaTurnos = (props) => {
     cargaTurnos()
   }
 
-    function addBarbero(){
-
-
+  function addBarbero() {
     (async () => {
-     
-            const { value: nombre } = await Swal.fire({
-              title: 'Ingresar Nombre',
-              input: 'text',      
-              showCancelButton: true,
-              inputValidator: (value) => {
-                if (!value) {
-                  return 'Necesitas escribir un nombre!'
-                }
+
+      const { value: nombre } = await Swal.fire({
+        title: 'Ingresar Nombre',
+        input: 'text',
+        showCancelButton: true,
+        inputValidator: (value) => {
+          if (!value) {
+            return 'Necesitas escribir un nombre!'
+          }
+        }
+
+      })
+
+
+      if (nombre) {
+        const { value: apellido } = await Swal.fire({
+          title: 'Ingresar Apellido',
+          input: 'text',
+          showCancelButton: true,
+          inputValidator: (value) => {
+            if (!value) {
+              return 'Necesitas escribir un apellido!'
+            }
+          }
+        })
+
+        if (apellido) {
+
+          const { value: photoUrl } = await Swal.fire({
+            title: 'Ingresar Url de foto',
+            input: 'text',
+            showCancelButton: true,
+            inputValidator: (value) => {
+              if (!value) {
+                return 'Necesitas escribir una URL!'
               }
-              
+
+            }
+
+          })
+          if (photoUrl) {
+            firebase.db.collection("turnBarber").doc().set({
+              name: nombre,
+              lastname: apellido,
+              photoUrl: photoUrl
             })
-            
-            
-            if (nombre) {   
-                    const { value: apellido } = await Swal.fire({
-                        title: 'Ingresar Apellido',
-                        input: 'text',      
-                        showCancelButton: true,
-                        inputValidator: (value) => {
-                              if (!value) {
-                                return 'Necesitas escribir un apellido!'
-                              }
-                        }
-                    })
-                    
-                      if (apellido) {
-                        
-                              const { value: photoUrl } = await Swal.fire({
-                                title: 'Ingresar Url de foto',
-                                input: 'text',      
-                                showCancelButton: true,
-                                    inputValidator: (value) => {
-                                          if (!value) {
-                                            return 'Necesitas escribir una URL!'
-                                          }                                   
-                                                                            
-                                    }
 
-                              })
-                              if(photoUrl) {
-                                firebase.db.collection("turnBarber").doc().set({
-                                  name: nombre,
-                                  lastname: apellido,
-                                  photoUrl: photoUrl
-                                })
+            Swal.fire(
+              'Barbero agregado correctamente',
+              'Se añadió a la colección',
+              'success'
+            )
+          }
+        }
 
-                                Swal.fire(
-                                'Barbero agregado correctamente',
-                                'Se añadió a la colección',
-                                'success' 
-                                )
-                              }
-                      }
-                      
-             }              
-    })()};
+      }
+    })()
+  };
    
   return (        
         <div className={classes.main}>
