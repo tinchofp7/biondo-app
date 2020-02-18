@@ -102,6 +102,7 @@ export default function MiniDrawer(props) {
       return firebase.getCurrentUserPhoto();
     }
   }
+
   const obtenerLink = (index)=>{
     switch (index) {
       case 0:

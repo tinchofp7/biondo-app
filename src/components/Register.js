@@ -72,8 +72,7 @@ function Register(props) {
 						onClick={onRegister}
 						className={classes.submit}>
 						Registrarse
-          			</Button>
-
+          </Button>
 					<Button
 						type="submit"
 						fullWidth
@@ -83,7 +82,7 @@ function Register(props) {
 						to="/login"
 						className={classes.submit}>
 						Regresar al login
-          			</Button>
+          </Button>
 				</form>
 			</Paper>
 		</main>

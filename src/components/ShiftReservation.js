@@ -7,7 +7,6 @@ import firebase from './firebase'
 import {CircularProgress, Chip, Grid } from '@material-ui/core'
 import Calendar from 'react-calendar';
 
-
 const styles = theme => ({
   select: {
     border: '1px solid rgb(63, 81, 181)',
