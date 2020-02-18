@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
-import { Typography, Paper, Avatar, Button, FormControl, Input, InputLabel, CardMedia } from '@material-ui/core'
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
+import { Typography, Paper, Avatar, Button, FormControl, Input, InputLabel } from '@material-ui/core'
 import withStyles from '@material-ui/core/styles/withStyles'
 import { Link, withRouter } from 'react-router-dom'
 import firebase from './firebase'
@@ -46,13 +45,9 @@ function SignIn(props) {
 	return (
 		<main className={classes.main}>
 			<Paper className={classes.paper}>
-				<CardMedia
-					component="img"
-					image="biondox.jpg"
-					title="Biondo"
-					height="100em"
-				/>
+			<Avatar alt="biondobarberialp's profile picture" src='biondox.jpg' style={{width:'150px', height: '150px'}}/>
 				<Typography component="h1" variant="h5">
+					Inicio de sesión
        			</Typography>
 				<form className={classes.form} onSubmit={e => e.preventDefault() && false}>
 					<FormControl margin="normal" required fullWidth>

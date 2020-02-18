@@ -62,7 +62,7 @@ class Firebase {
 	}
 
 	getCurrentUserID() {
-		return this.auth.currentUser.uid
+		return this.auth.currentUser && this.auth.currentUser.uid
 	}
 
 	setNewBooking(booking) {
@@ -157,6 +157,7 @@ class Firebase {
 
 	getNextBookingUser(id) {
 		var booking = {}
+		var arri = []
 		return new Promise((resolve, reject) => {
 			this.db.collection("turnos")
 			.where("idCliente", "==", id)
@@ -165,16 +166,18 @@ class Firebase {
 			.then( querySnapshot => {
 				querySnapshot.forEach(
 					doc =>{
-						booking.id= doc.id
-						booking.dia= doc.data().dia
-						booking.hora= doc.data().hora
-						booking.nombreBarbero= doc.data().nombreBarbero
-						booking.nombreCliente= doc.data().nombreCliente
-						booking.idBarbero= doc.data().idBarbero
-						booking.idCliente= doc.data().idCliente
-						booking.avatarCliente= doc.data().avatarCliente
+						arri.push(doc)
 					}
 				)
+				let aux = arri.sort(function(a, b){return new Date(a.data().dia) - new Date(b.data().dia)}).shift();
+				booking.id= aux.id
+				booking.dia= aux.data().dia
+				booking.hora= aux.data().hora
+				booking.nombreBarbero= aux.data().nombreBarbero
+				booking.nombreCliente= aux.data().nombreCliente
+				booking.idBarbero= aux.data().idBarbero
+				booking.idCliente= aux.data().idCliente
+				booking.avatarCliente= aux.data().avatarCliente
 				resolve(booking)
 			})
 			.catch( err =>{

@@ -1,22 +1,29 @@
 import React, { useEffect, useState} from 'react';
 import { connect } from 'react-redux';
-import {withRouter } from 'react-router-dom';
+import { withStyles } from '@material-ui/core/styles';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 import firebase from './firebase'
 import {CircularProgress, Chip, Grid } from '@material-ui/core'
 import Calendar from 'react-calendar';
-import { makeStyles } from '@material-ui/core/styles';
+
+
+const styles = theme => ({
+  select: {
+    border: '1px solid rgb(63, 81, 181)',
+    borderRadius: '10%'
+    }
+});
 
 
 const ShiftReservation = (props) =>{
-    const { barberSelect } = props;
+    const { barberSelect, classes } = props;
     const t1 = new Date("2019-11-30 13:00");
     const t2 = new Date("2019-11-30 20:30");
     let turnos = [];
 
     while(t1.getTime() <= t2.getTime()){
-        turnos.push(t1.getHours() +':'+(t1.getMinutes() == 0? "00" : t1.getMinutes() ))
+        turnos.push(t1.getHours() +':'+(t1.getMinutes() === 0? "00" : t1.getMinutes() ))
         t1.setMinutes(t1.getMinutes() + 30);
     }
     
@@ -45,29 +52,16 @@ const ShiftReservation = (props) =>{
             loadTurnos()
                 .then(function (data) {
                     setArrayTurnos(data);
-                    console.log(data)
                     setTimeout(() => {
                         setIsLoading(false)
                     }, 1000)
                 })
         }, [])
 
-    
-
-    const useStyles = makeStyles({
-      root: {
-        width: '100%',
-        overflowX: 'auto',
-      },
-      table: {
-        minWidth: 650,
-      },
-    });
-
     const loadTurnos = ()=>{
         var turnos = []
         return new Promise( resolve => {
-        if(process.env.REACT_APP_NODE_ENV == 'production'){ 
+        if(process.env.REACT_APP_NODE_ENV === 'production'){ 
             firebase.db.collection("turnos").where("idBarbero", "==", barberSelect.id)
             .get()
             .then(function(querySnapshot) {
@@ -90,9 +84,7 @@ const ShiftReservation = (props) =>{
         setDateTurnSelect(valueFormat)
     }
     
-    const classes = useStyles();
     const getTimes = (turnosDados) => {
-        console.log(dateTurnSelect)
         let turnosFinal = [];
         if (turnosFinal) {
             mapa.forEach(
@@ -112,7 +104,7 @@ const ShiftReservation = (props) =>{
             return turnosFinal
     }
 
-    const miModal = (props)=>{
+    const turnoNoDisponible = (props)=>{
         const MySwal = withReactContent(Swal)
           return(
             MySwal.fire({
@@ -140,11 +132,12 @@ const ShiftReservation = (props) =>{
                             <div style={{ marginLeft: "10%", marginRight: "10%" }}>
                                 <Grid container spacing={3}>
                                     {getTimes(arrayTurnos).map(turno =>{
-                                        return(<Grid key={turno.hora} item xs={12} sm={6} md={3}  >
-                                            <Chip color={turno.isReservado ? "secondary" : "primary"}
+                                        return(<Grid key={turno.hora} item xs={12} sm={6} md={3} className={(timeTurnSelect === turno.hora) ? classes.select : ""}>
+                                            <Chip color={(turno.isReservado ? "secondary" : "primary")}
                                             style={{ fontSize: "18px", display: "flex", height: "100%" }}
-                                            onClick={() => turno.isReservado ? miModal() : setTimeSelect(turno.hora)}
-                                            label={turno.hora} />
+                                            onClick={() => turno.isReservado ? turnoNoDisponible() : setTimeSelect(turno.hora)}
+                                            label={turno.hora}
+                                            />
                                         </Grid>)
                                         }
                                     )}
@@ -185,4 +178,4 @@ saveDia: saveDia,
 saveHora: saveHora
 }
 
-export default connect(mapStateToProps,mapDispatchToProps)(ShiftReservation);
+export default withStyles(styles)(connect(mapStateToProps,mapDispatchToProps)(ShiftReservation));

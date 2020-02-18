@@ -33,7 +33,6 @@ function SelectBarber (props){
             loadBarbers()
                 .then(function (data) {
                     setBarbersArray(data)
-                    console.log(data)
                     setTimeout(() => {
                         setIsLoading(false)
                     }, 2000);
@@ -43,7 +42,7 @@ function SelectBarber (props){
     function loadBarbers (){
         var barberos = []
         return new Promise( resolve => {
-        if(process.env.REACT_APP_NODE_ENV == 'production'){ 
+        if(process.env.REACT_APP_NODE_ENV === 'production'){ 
             firebase.db.collection("turnBarber").get()
             .then(function(querySnapshot) {
                 querySnapshot.forEach(function(doc) {
