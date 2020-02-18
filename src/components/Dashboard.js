@@ -110,7 +110,7 @@ function Dashboard(props) {
           		</Button>
 				</Paper>
 			</Container>
-			{!!proximoTurno.dia &&
+			{!!proximoTurno &&
 			<Container fixed>
 			<Paper className={classes.paper}>
 				<Typography component="h1" variant="h5">

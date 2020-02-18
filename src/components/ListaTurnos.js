@@ -13,8 +13,8 @@ const styles = theme => ({
   main: {
     width: 'auto',
     display: 'block',
-    marginLeft: theme.spacing.unit * 15,
-    marginRight: theme.spacing.unit * 10,
+    marginLeft: theme.spacing.unit * 3,
+    marginRight: theme.spacing.unit * 2,
     marginTop: theme.spacing.unit * 12,
   },
   large: {
