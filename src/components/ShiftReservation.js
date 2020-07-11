@@ -4,8 +4,10 @@ import { withStyles } from '@material-ui/core/styles';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 import firebase from './firebase'
-import {CircularProgress, Chip, Grid } from '@material-ui/core'
+import {CircularProgress, Chip, Grid } from '@material-ui/core';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
 import Calendar from 'react-calendar';
+import DatePicker from 'react-date-picker';
 
 const styles = theme => ({
   select: {
@@ -42,6 +44,9 @@ const ShiftReservation = (props) =>{
     const [isLoading, setIsLoading ] = useState(true);
     const [dateTurnSelect, setDateTurnSelect] = useState(fechaFinal);
     const [timeTurnSelect, setTimeSelect] = useState("");
+    const matches = useMediaQuery('(min-width:600px)');
+    const desktop = { display: "inline-flex" };
+    const mobile = { display: "grid" };
 
     props.saveDia(dateTurnSelect);
     props.saveHora(timeTurnSelect);
@@ -120,14 +125,22 @@ const ShiftReservation = (props) =>{
             {isLoading ? <CircularProgress />
                 :
                 <>
-                        <div style={{ display: "inline-flex" }}>
-                            <div style={{ boxShadow: "5px 5px 25px", display: "flex", marginLeft:"15%" }}>
+                <div style={matches ? desktop : mobile}>
+                {matches ? <div style={{ boxShadow: "5px 5px 25px", display: "flex", marginLeft:"15%" }}>
                                 <Calendar
                                 value={new Date(dateTurnSelect)}
                                 minDate={new Date()}
                                 onClickDay={(value) => formatFecha(value)}
                                 />
                             </div>
+                        :
+                        <div style={{ display: "grid", marginLeft: "10%", marginRight: "10%", marginBottom: "6%", fontSize: "1.52rem"}}>
+                                <DatePicker
+                                value={new Date(dateTurnSelect)}
+                                minDate={new Date()}
+                                onClickDay={(value) => formatFecha(value)}
+                                />
+                        </div>}
                             <div style={{ marginLeft: "10%", marginRight: "10%" }}>
                                 <Grid container spacing={3}>
                                     {getTimes(arrayTurnos).map(turno =>{
