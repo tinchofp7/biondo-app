@@ -60,18 +60,16 @@ function SelectBarber (props){
             )
         })}
         
-        return(
+    return (
         <div>
-         {isLoading ? <Skeleton variant="rect" width={1300} height={600} />
-         :
-         <div className={classes.root}>
-        <ReservaTurno
-        history={props.history} 
-        barberos={barbersArray}
-        />
-             )
-         }
-         </div>}
+            {isLoading ? <Skeleton variant="rect" width={1300} height={600} />
+                :
+                <div className={classes.root}>
+                    <ReservaTurno
+                        history={props.history}
+                        barberos={barbersArray}
+                    />
+                </div>}
         </div>
     )
 }

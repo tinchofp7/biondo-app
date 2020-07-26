@@ -160,10 +160,10 @@ const ListaTurnos = (props) => {
     })()
   };
    
-  return (        
-        <div className={classes.main}>
-      {isLoading ? <CircularProgress/> :
-      <>
+  return (
+    <div className={classes.main}>
+      {isLoading ? <CircularProgress /> :
+        <>
           <MaterialTable
             title={obtenerTituloFecha()}
             columns={state.columns}
@@ -177,7 +177,7 @@ const ListaTurnos = (props) => {
               },
               toolbar: {
                 searchPlaceholder: "Buscar"
-              }             
+              }
             }}
             actions={[
               {
@@ -202,7 +202,7 @@ const ListaTurnos = (props) => {
             }}
 
             editable={{
-              onRowAdd:  newData =>
+              onRowAdd: newData =>
                 new Promise(resolve => {
                   setTimeout(() => {
                     resolve();
@@ -214,18 +214,17 @@ const ListaTurnos = (props) => {
                   }, 600);
                 })
             }}
-                     
+
           />
           <div className={classes.root}>
-      
-              <Button variant="contained" color="secondary" onClick={addBarbero}>
-                Agregar Barbero
+            <Button variant="contained" color="secondary" onClick={addBarbero}>
+              Agregar Barbero
               </Button>
-          </div> 
-           
-      </>}
+          </div>
+
+        </>}
     </div>
-    
+
   )
 }
 

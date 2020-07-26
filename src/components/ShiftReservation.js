@@ -19,17 +19,7 @@ const styles = theme => ({
 
 const ShiftReservation = (props) =>{
     const { barberSelect, classes } = props;
-    const t1 = new Date("2019-11-30 13:00");
-    const t2 = new Date("2019-11-30 20:30");
-    let turnos = [];
-
-    while(t1.getTime() <= t2.getTime()){
-        turnos.push(t1.getHours() +':'+(t1.getMinutes() === 0? "00" : t1.getMinutes() ))
-        t1.setMinutes(t1.getMinutes() + 30);
-    }
     
-    //t.setSeconds(t.getSeconds() + 10);
-    //const rangoLaboral = 
     //de Lunes a Sabados de 13:00 a 21:00
     const mapa =[
         {hora:"13:00"},{hora:"13:30"},{hora:"14:00"},{hora:"14:30"},
@@ -45,8 +35,8 @@ const ShiftReservation = (props) =>{
     const [dateTurnSelect, setDateTurnSelect] = useState(fechaFinal);
     const [timeTurnSelect, setTimeSelect] = useState("");
     const matches = useMediaQuery('(min-width:600px)');
-    const desktop = { display: "inline-flex" };
-    const mobile = { display: "grid" };
+    const desktop = { display: "inline-flex", marginBottom: "5%" };
+    const mobile = { display: "grid", marginBottom: "15%" };
 
     props.saveDia(dateTurnSelect);
     props.saveHora(timeTurnSelect);
