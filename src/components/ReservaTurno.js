@@ -6,7 +6,7 @@ import clsx from 'clsx';
 import SettingsIcon from '@material-ui/icons/Settings';
 import GroupAddIcon from '@material-ui/icons/GroupAdd';
 import VideoLabelIcon from '@material-ui/icons/VideoLabel';
-import { Typography, TextField, Stepper, Step, StepLabel, StepConnector, Button, CircularProgress} from '@material-ui/core';
+import { Typography, TextField, Stepper, Step, StepLabel, StepConnector, Button, CircularProgress, Container, useMediaQuery} from '@material-ui/core';
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
 import { connect } from 'react-redux';
@@ -97,25 +97,21 @@ const useStyles = makeStyles(theme => ({
     textAlign: "center"
   },
   button: {
-    marginRight: theme.spacing(10),
-    marginTop: theme.spacing(10)
+    marginRight: theme.spacing(10)
   },
   instructions: {
-    marginTop: theme.spacing(1),
-    marginBottom: theme.spacing(1),
-    marginLeft: theme.spacing(1),
+    marginBottom: theme.spacing(1)
   }
 }));
-
-function getSteps() {
-  return ['Elegí a tu barbero favorito', 'Selecciona día y hora', 'Confirma'];
-}
 
 const ResumenTurno = (state)=>{
   const { barberSelect, diaSelect, horaSelect } = state.state;
   const diaSeteado = diaSelect.split("/");
+  const matches = useMediaQuery('(min-width:500px)');
+  const styleResumeDesktop = {marginBottom: "6%"};
+  const styleResumeMobile = {marginBottom: "20%"};
   return (
-    <div>
+    <div style={matches ? styleResumeDesktop : styleResumeMobile}>
     <TextField
       id="outlined-full-width"
       label="Barbero"
@@ -178,7 +174,14 @@ const ReservaTurno = (props)=> {
   const {barberos} = props;
 const classes = useStyles();
 const [activeStep, setActiveStep] = React.useState(0);
-const steps = getSteps();
+const matches = useMediaQuery('(min-width:700px)');
+const styleButtonDesktop = { textAlign: "center", marginBottom: "1%" };
+const styleButtonMobile = { textAlign: "center", marginBottom: "20%" };
+const getSteps = (matches) =>{
+  let desktop = ['Elegí a tu barbero favorito', 'Selecciona día y hora', 'Confirma'];
+  let mobile = ['Barbero', 'Día y hora', 'Confirma']
+  return matches ? desktop : mobile
+}
 
 const handleNext = () => {
   setActiveStep(prevActiveStep => prevActiveStep + 1);
@@ -256,16 +259,17 @@ const handleBack = () => {
     }
   }
 return (
-  <div className={classes.root}>
-    <Stepper alternativeLabel activeStep={activeStep} connector={<ColorlibConnector />}>
-      {steps.map(label => (
-        <Step key={label}>
-          <StepLabel StepIconComponent={ColorlibStepIcon}>{label}</StepLabel>
-        </Step>
-      ))}
-    </Stepper>
-    <div>
-        <div style={{textAlign: "center"}}>
+  <Container style={{ overflowX: "hidden" }}>
+    <div className={classes.root}>
+      <Stepper alternativeLabel activeStep={activeStep} connector={<ColorlibConnector />}>
+        {getSteps(matches).map(label => (
+          <Step key={label}>
+            <StepLabel StepIconComponent={ColorlibStepIcon}>{label}</StepLabel>
+          </Step>
+        ))}
+      </Stepper>
+      <div>
+        <div style={matches ? styleButtonDesktop : styleButtonMobile}>
           <Typography variant="overline" className={classes.instructions}>{getStepContent(activeStep, barberos, props)}</Typography>
           <div>
             <Button disabled={activeStep === 0} onClick={handleBack} className={classes.button}>
@@ -274,16 +278,16 @@ return (
             <Button
               variant="contained"
               color="primary"
-              onClick={activeStep === steps.length ? reservaTurnoFinal(props) : handleNext}
-              className={classes.button}
+              onClick={activeStep === getSteps(matches).length ? reservaTurnoFinal(props) : handleNext}
               disabled={nextIsActive(props)}
             >
-              {activeStep === steps.length - 1 ? 'Reservar' : 'Siguiente'}
+              {activeStep === getSteps(matches).length - 1 ? 'Reservar' : 'Siguiente'}
             </Button>
           </div>
-        </div>  
+        </div>
+      </div>
     </div>
-  </div>
+  </Container>
 );
 }
 

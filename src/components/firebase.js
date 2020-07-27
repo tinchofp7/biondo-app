@@ -169,16 +169,21 @@ class Firebase {
 						arri.push(doc)
 					}
 				)
-				let aux = arri.sort(function(a, b){return new Date(a.data().dia) - new Date(b.data().dia)}).shift();
-				booking.id= aux.id
-				booking.dia= aux.data().dia
-				booking.hora= aux.data().hora
-				booking.nombreBarbero= aux.data().nombreBarbero
-				booking.nombreCliente= aux.data().nombreCliente
-				booking.idBarbero= aux.data().idBarbero
-				booking.idCliente= aux.data().idCliente
-				booking.avatarCliente= aux.data().avatarCliente
-				resolve(booking)
+				let aux = {}
+				aux = arri.sort(function(a, b){return new Date(a.data().dia) - new Date(b.data().dia)}).shift();
+				if(aux){
+					booking.id= aux.id
+					booking.dia= aux.data().dia
+					booking.hora= aux.data().hora
+					booking.nombreBarbero= aux.data().nombreBarbero
+					booking.nombreCliente= aux.data().nombreCliente
+					booking.idBarbero= aux.data().idBarbero
+					booking.idCliente= aux.data().idCliente
+					booking.avatarCliente= aux.data().avatarCliente
+					resolve(booking)
+				}else{
+					resolve(aux)
+				}
 			})
 			.catch( err =>{
 				reject(err)
