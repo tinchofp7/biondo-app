@@ -109,45 +109,44 @@ const ShiftReservation = (props) =>{
             })
           )
         }
-    return(
-        
+    return (
+
         <>
             {isLoading ? <CircularProgress />
                 :
                 <>
-                <div style={matches ? desktop : mobile}>
-                {matches ? <div style={{ boxShadow: "5px 5px 25px", display: "flex", marginLeft:"15%" }}>
-                                <Calendar
+                    <div style={matches ? desktop : mobile}>
+                        {matches ? <div style={{ boxShadow: "5px 5px 25px", display: "flex", marginLeft: "15%" }}>
+                            <Calendar
                                 value={new Date(dateTurnSelect)}
                                 minDate={new Date()}
                                 onClickDay={(value) => formatFecha(value)}
-                                />
-                            </div>
-                        :
-                        <div style={{ display: "grid", marginLeft: "10%", marginRight: "10%", marginBottom: "6%", fontSize: "1.52rem"}}>
+                            />
+                        </div>
+                            :
+                            <div style={{ display: "grid", marginLeft: "10%", marginRight: "10%", marginBottom: "6%", fontSize: "1.52rem" }}>
                                 <DatePicker
-                                value={new Date(dateTurnSelect)}
-                                minDate={new Date()}
-                                onClickDay={(value) => formatFecha(value)}
+                                    value={new Date(dateTurnSelect)}
+                                    minDate={new Date()}
+                                    onClickDay={(value) => formatFecha(value)}
                                 />
-                        </div>}
-                            <div style={{ marginLeft: "10%", marginRight: "10%" }}>
-                                <Grid container spacing={3}>
-                                    {getTimes(arrayTurnos).map(turno =>{
-                                        return(<Grid key={turno.hora} item xs={12} sm={6} md={3} className={(timeTurnSelect === turno.hora) ? classes.select : ""}>
-                                            <Chip color={(turno.isReservado ? "secondary" : "primary")}
+                            </div>}
+                        <div style={{ marginLeft: "10%", marginRight: "10%" }}>
+                            <Grid container spacing={3}>
+                                {getTimes(arrayTurnos).map(turno => {
+                                    return (<Grid key={turno.hora} item xs={12} sm={6} md={3} className={(timeTurnSelect === turno.hora) ? classes.select : ""}>
+                                        <Chip color={(turno.isReservado ? "secondary" : "primary")}
                                             style={{ fontSize: "18px", display: "flex", height: "100%" }}
                                             onClick={() => turno.isReservado ? turnoNoDisponible() : setTimeSelect(turno.hora)}
                                             label={turno.hora}
-                                            />
-                                        </Grid>)
-                                        }
-                                    )}
-                                </Grid>
-                            </div>
+                                        />
+                                    </Grid>)
+                                }
+                                )}
+                            </Grid>
                         </div>
-                        </> 
-
+                    </div>
+                </>
             }
         </>
     )
